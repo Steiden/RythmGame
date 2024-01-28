@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:background="@color/blackBackground">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="400dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Какое-то название"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="50sp"
+                android:textStyle="bold" />
+
+            <AbsoluteLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:ignore="Deprecated">
+
+                <TextView
+                    android:id="@+id/star1"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_x="50dp"
+                    android:layout_y="25dp"
+                    android:text="*"
+                    android:textColor="@color/white"
+                    android:textAlignment="center"
+                    android:textSize="50sp" />
+
+                <TextView
+                    android:id="@+id/star2"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_x="246dp"
+                    android:layout_y="105dp"
+                    android:text="*"
+                    android:textColor="@color/white"
+                    android:textAlignment="center"
+                    android:textSize="50sp" />
+
+                <TextView
+                    android:id="@+id/star3"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_x="101dp"
+                    android:layout_y="176dp"
+                    android:text="*"
+                    android:textColor="@color/white"
+                    android:textAlignment="center"
+                    android:textSize="50sp" />
+
+                <TextView
+                    android:id="@+id/star4"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_x="324dp"
+                    android:layout_y="8dp"
+                    android:text="*"
+                    android:textColor="@color/white"
+                    android:textAlignment="center"
+                    android:textSize="50sp" />
+
+                <TextView
+                    android:id="@+id/star5"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_x="31dp"
+                    android:layout_y="304dp"
+                    android:text="*"
+                    android:textColor="@color/white"
+                    android:textAlignment="center"
+                    android:textSize="50sp" />
+
+                <TextView
+                    android:id="@+id/star6"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_x="319dp"
+                    android:layout_y="214dp"
+                    android:text="*"
+                    android:textColor="@color/white"
+                    android:textAlignment="center"
+                    android:textSize="50sp" />
+
+                <TextView
+                    android:id="@+id/star7"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_x="237dp"
+                    android:layout_y="305dp"
+                    android:textColor="@color/white"
+                    android:text="*"
+                    android:textAlignment="center"
+                    android:textSize="50sp" />
+
+
+            </AbsoluteLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="330dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_centerInParent="true">
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button_style"
+                    android:text="Играть"
+                    android:textColor="@color/white"
+                    android:onClick="startActivityChooseSong"/>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button_style"
+                    android:text="Настройки"
+                    android:textColor="@color/white"
+                    android:layout_marginTop="40dp"
+                    android:onClick="startActivitySettings"/>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button_style"
+                    android:text="Выйти"
+                    android:textColor="@color/white"
+                    android:layout_marginTop="40dp"
+                    android:onClick="ExitActivity"/>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
