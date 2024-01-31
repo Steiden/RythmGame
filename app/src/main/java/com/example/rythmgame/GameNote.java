@@ -8,7 +8,7 @@ import android.widget.RelativeLayout;
 public class GameNote {
 
     // Константы
-    private final int MAX_SCALE = 150; // Максимальный размер ноты
+    private final int MAX_SCALE = 175; // Максимальный размер ноты
     private final int MIN_SCALE = 50;  // Минимальный размер ноты
     private final int MAX_POSITION_X = 250; // Максимальное значение расположения по оси X
     private final int MAX_POSITION_Y = 500; // Максимальное значение расположения по оси Y

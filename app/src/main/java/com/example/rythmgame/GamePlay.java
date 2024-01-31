@@ -67,11 +67,11 @@ public class GamePlay {
     // Создание анимации сужения кольца ноты
     private void createRingAnimation() {
         // Настройка анимации сужения кольца ноты по X
-        this.noteRingAnimationScaleX = ObjectAnimator.ofFloat(this.actualGameNote.getNoteRing(), "scaleX", 1f, 0.43f).setDuration(1000);
+        this.noteRingAnimationScaleX = ObjectAnimator.ofFloat(this.actualGameNote.getNoteRing(), "scaleX", 1f, 0.40f).setDuration(1250);
         this.noteRingAnimationScaleX.setInterpolator(new LinearInterpolator());
 
         // Настройка анимации сужения кольца ноты по Y
-        this.noteRingAnimationScaleY = ObjectAnimator.ofFloat(this.actualGameNote.getNoteRing(), "scaleY", 1f, 0.43f).setDuration(1000);
+        this.noteRingAnimationScaleY = ObjectAnimator.ofFloat(this.actualGameNote.getNoteRing(), "scaleY", 1f, 0.4f).setDuration(1250);
         this.noteRingAnimationScaleY.setInterpolator(new LinearInterpolator());
 
         // Удаление ноты по окончанию анимации
