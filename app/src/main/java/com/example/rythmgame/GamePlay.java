@@ -2,29 +2,39 @@ package com.example.rythmgame;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.CountDownTimer;
-import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
 public class GamePlay {
+    // Игровые переменные
     private GameNote actualGameNote;  // Текущая нота
+    private int score;  // Счет
+    private float accuracy; // Точность
 
+    // Переменные для анимаций
+    ObjectAnimator noteRingAnimationScaleX; // Анимация сужения кольца ноты по оси X
+    ObjectAnimator noteRingAnimationScaleY; // Анимация сужения кольца ноты по оси Y
+
+    // Переменные для работы в активити
     @SuppressLint("StaticFieldLeak")
-    public static Context context;
-    private final RelativeLayout NoteContainerParent;
+    public static Context context;  // Контекст активити игры
+    private final RelativeLayout NoteContainerParent;   // Контейнер для размещения нот
+    private final TextView scoreTextView;   // TextView для счета
+    private final TextView accuracyTextView;    // TextView для точности
 
-    // Конструктор
-    public GamePlay(Context context, RelativeLayout NoteContainerParent) {
+    // Конструктор класса
+    public GamePlay(Context context, RelativeLayout NoteContainerParent, TextView scoreTextView, TextView accuracyTextView) {
         GamePlay.context = context;
         this.NoteContainerParent = NoteContainerParent;
+        this.scoreTextView = scoreTextView;
+        this.accuracyTextView = accuracyTextView;
+        this.score = 0;
+        this.accuracy = 0;
     }
 
     // Создание и размещение ноты
@@ -32,15 +42,20 @@ public class GamePlay {
         // Установка текущей ноты
         this.actualGameNote = new GameNote(context, this.NoteContainerParent);
 
+        // Создание анимации сужения кольца ноты
+        createRingAnimation();
+
+        // Добавление действий при клике на ноту
+        addActionsOnClickNote();
+
         // Создание и размещение текущей ноты
         this.actualGameNote.create().place();
 
         // Запуск анимации сужения кольца ноты
-        createAndStartRingAnimation(this.actualGameNote);
+        startRingAnimation();
     }
 
-    // Удаление предыдущей ноты,
-    // создание и размещение новой ноты
+    // Удаление предыдущей ноты, создание и размещение новой ноты
     public void deleteNoteAndCreateAndPlaceNew() {
         // Удаление текущей ноты
         this.actualGameNote.delete();
@@ -49,18 +64,18 @@ public class GamePlay {
         createAndPlaceNote();
     }
 
-    // Создание и запуск анимации сужения кольца ноты
-    private void createAndStartRingAnimation(GameNote gameNote) {
+    // Создание анимации сужения кольца ноты
+    private void createRingAnimation() {
         // Настройка анимации сужения кольца ноты по X
-        ObjectAnimator noteRingAnimationScaleX = ObjectAnimator.ofFloat(gameNote.getNoteRing(), "scaleX", 1f, 0.4f).setDuration(2000);
-        noteRingAnimationScaleX.setInterpolator(new LinearInterpolator());
+        this.noteRingAnimationScaleX = ObjectAnimator.ofFloat(this.actualGameNote.getNoteRing(), "scaleX", 1f, 0.43f).setDuration(1000);
+        this.noteRingAnimationScaleX.setInterpolator(new LinearInterpolator());
 
         // Настройка анимации сужения кольца ноты по Y
-        ObjectAnimator noteRingAnimationScaleY = ObjectAnimator.ofFloat(gameNote.getNoteRing(), "scaleY", 1f, 0.4f).setDuration(2000);
-        noteRingAnimationScaleY.setInterpolator(new LinearInterpolator());
+        this.noteRingAnimationScaleY = ObjectAnimator.ofFloat(this.actualGameNote.getNoteRing(), "scaleY", 1f, 0.43f).setDuration(1000);
+        this.noteRingAnimationScaleY.setInterpolator(new LinearInterpolator());
 
         // Удаление ноты по окончанию анимации
-        noteRingAnimationScaleX.addListener(new Animator.AnimatorListener() {
+        this.noteRingAnimationScaleX.addListener(new Animator.AnimatorListener() {
             public void onAnimationStart(@NonNull Animator animation) {}
             public void onAnimationEnd(@NonNull Animator animation) {
                 deleteNoteAndCreateAndPlaceNew();
@@ -68,15 +83,25 @@ public class GamePlay {
             public void onAnimationCancel(@NonNull Animator animation) {}
             public void onAnimationRepeat(@NonNull Animator animation) {}
         });
+    }
 
-        // По клику на ноту анимация сужения кольца заканчивается
-        gameNote.getNoteButton().setOnClickListener(v -> {
-            noteRingAnimationScaleX.end();
-            noteRingAnimationScaleY.end();
+    // Запуск анимации сужения кольца ноты
+    private void startRingAnimation() {
+        this.noteRingAnimationScaleY.start();
+        this.noteRingAnimationScaleX.start();
+    }
+
+    // Добавление действий при клике на ноту
+    @SuppressLint("SetTextI18n")
+    private void addActionsOnClickNote() {
+        this.actualGameNote.getNoteButton().setOnClickListener(v -> {
+            // Анимация сужения кольца заканчивается
+            this.noteRingAnimationScaleY.end();
+            this.noteRingAnimationScaleX.end();
+
+            // Добавление очков к счету
+            this.score += 100;
+            this.scoreTextView.setText("" + this.score);
         });
-
-        // Запуск анимации сужения кольца ноты
-        noteRingAnimationScaleX.start();
-        noteRingAnimationScaleY.start();
     }
 }

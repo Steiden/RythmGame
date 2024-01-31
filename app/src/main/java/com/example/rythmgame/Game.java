@@ -3,25 +3,20 @@ package com.example.rythmgame;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.util.DisplayMetrics;
-import android.util.TypedValue;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.Random;
-
 public class Game extends AppCompatActivity {
 
-    // Элементы activity
+    // Элементы активити
     private RelativeLayout gameContainer;
+    private TextView scoreTextView;
+    private TextView accuracyTextView;
 
-    public View.OnClickListener getTest;
     private TextView timerTextView; // Текст таймера обратного отсчета
     private CountDownTimer timer;   // Игровой таймер
 
@@ -33,6 +28,10 @@ public class Game extends AppCompatActivity {
 
             // Получение главного контейнера игры
             gameContainer = findViewById(R.id.gameContainer);
+            // Получение TextView счета
+            scoreTextView = findViewById(R.id.scoreTextView);
+            // Получение TextView точности
+            accuracyTextView = findViewById(R.id.accuracyTextView);
 
             // Получение timerTextView
             timerTextView = findViewById(R.id.timerTextView);
@@ -46,7 +45,7 @@ public class Game extends AppCompatActivity {
 
                 public void onFinish() {
                     timerTextView.setText("");
-                    new GamePlay(getApplicationContext(), gameContainer)
+                    new GamePlay(getApplicationContext(), gameContainer, scoreTextView, accuracyTextView)
                             .createAndPlaceNote();
                 }
             }.start();

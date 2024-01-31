@@ -1,18 +1,9 @@
 package com.example.rythmgame;
 
 import android.content.Context;
-import android.os.CountDownTimer;
-import android.util.DisplayMetrics;
-import android.util.TypedValue;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
-
-import com.example.rythmgame.Game;
-import com.example.rythmgame.R;
-
-import java.util.Random;
 
 public class GameNote {
 
@@ -29,7 +20,7 @@ public class GameNote {
 
     // Переменные для рамещения ноты
     private Context context;    // Контекст класса игры
-    private RelativeLayout NoteContainerParent; // Родительский контейнер игры
+    private final RelativeLayout NoteContainerParent; // Родительский контейнер игры
 
     // Конструктор
     public GameNote(Context context, RelativeLayout NoteContainerParent) {
@@ -82,7 +73,7 @@ public class GameNote {
     }
 
     // Размещение ноты
-    public GameNote place() {
+    public void place() {
         // Преобразование макс. позиций по X и Y в величину dp
         int maxPosXTransformed = GameHelper.transformPxToDp(this.MAX_POSITION_X);
         int maxPosYTransformed = GameHelper.transformPxToDp(this.MAX_POSITION_Y);
@@ -93,8 +84,6 @@ public class GameNote {
 
         // Добавление контейнера ноты в родительский Layout
         NoteContainerParent.addView(this.NoteContainer);
-
-        return this;
     }
 
     // Удаление ноты
