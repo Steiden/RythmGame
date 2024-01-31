@@ -56,48 +56,44 @@ public class ChooseSongActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
+    // Переключение на следующую песню
+    public void setNextSong(View view) {
+        // Ничего не делать, если достигнута последняя песня
+        if (songName.indexOf(selectedSong) + 1 >= songName.size()) return;
 
-        outState.putString("selectedSong", selectedSong);
-    }
-
-    public void goToActivityMain(View view) {
-        // Переключение на другую activity
-        Intent i = new Intent(getApplicationContext(), MainActivity.class);
-        startActivity(i);
-    }
-
-    public void startActivityChooseLevel(View view) {
         // Сохранение выбранной песни
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("selectedSong", selectedSong);
-        editor.apply();
-
-        // Переход к активити выбора уровня песни
-        Intent i = new Intent(getApplicationContext(), ChooseLevelActivity.class);
-        startActivity(i);
+        saveSelectedSong(songName.get(songName.indexOf(selectedSong) + 1));
     }
 
-    public void nextSong(View view) {
-        try {
-            if (songName.indexOf(selectedSong) + 1 >= songName.size()) return;
+    // Переключение на предыдущую песню
+    public void setPrevSong(View view) {
+        // Ничего не делать, если достигнута первая песня
+        if (songName.indexOf(selectedSong) - 1 < 0) return;
 
-            selectedSong = songName.get(songName.indexOf(selectedSong) + 1);
-            SelectedSongImageButton.setImageResource(songs.get(selectedSong));
-        }
-        catch (Exception ex) {
-            System.out.println(ex.getMessage());
-            Toast.makeText(this, ex.getMessage(), Toast.LENGTH_SHORT).show();
-        }
+        // Сохранение выбранном песни
+        saveSelectedSong(songName.get(songName.indexOf(selectedSong) - 1));
     }
 
-    public void prevSong(View view) {
-        try {
-            if (songName.indexOf(selectedSong) - 1 < 0) return;
+    // Переходы между активити
+    public void startActivityMain(View view) {
+        GameTransitionHelper.startMainActivity(this);
+    }
+    public void startActivityChooseLevel(View view) {
+        saveSelectedSong(selectedSong);
+        GameTransitionHelper.startChooseLevelActivity(this);
+    }
 
-            selectedSong = songName.get(songName.indexOf(selectedSong) - 1);
+    // Сохранение выбранной песни
+    private void saveSelectedSong(String song) {
+        try {
+            selectedSong = song;
+
+            // Сохранение выбранной песни
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("selectedSong", selectedSong);
+            editor.apply();
+
+            // Установка изображения для выбранной песни
             SelectedSongImageButton.setImageResource(songs.get(selectedSong));
         }
         catch (Exception ex) {

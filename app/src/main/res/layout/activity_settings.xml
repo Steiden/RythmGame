@@ -24,7 +24,7 @@
                 android:background="@color/transparent"
                 android:src="@drawable/back_arrow"
                 android:onClick="backToMainActivity"
-                android:contentDescription="Go to main window" />
+                android:contentDescription="@string/go_to_main_activity" />
 
         </RelativeLayout>
         
@@ -36,8 +36,8 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Настройки"
-                android:textSize="50dp"
+                android:text="@string/text_settings"
+                android:textSize="50sp"
                 android:textStyle="bold"
                 android:textColor="@color/white"
                 android:textAlignment="center"/>
@@ -51,6 +51,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@color/transparent"
                     android:orientation="horizontal"
                     android:paddingHorizontal="30dp"
                     android:layout_marginTop="125dp">
@@ -61,25 +62,28 @@
                         android:layout_weight=".3"
                         android:scaleType="fitCenter"
                         android:background="@drawable/icon_button_style"
-                        android:src="@drawable/note"/>
+                        android:src="@drawable/note"
+                        android:contentDescription="@string/on_or_off_music" />
 
                     <ImageButton
                         android:layout_width="0dp"
                         android:layout_height="50dp"
                         android:layout_weight=".3"
-                        android:layout_marginLeft="25dp"
+                        android:layout_marginStart="25dp"
                         android:scaleType="fitCenter"
                         android:background="@drawable/icon_button_style"
-                        android:src="@drawable/vibro_icon"/>
+                        android:src="@drawable/vibro_icon"
+                        android:contentDescription="@string/on_or_off_vibration" />
 
                     <ImageButton
                         android:layout_width="0dp"
                         android:layout_height="50dp"
                         android:layout_weight=".3"
-                        android:layout_marginLeft="25dp"
+                        android:layout_marginStart="25dp"
                         android:scaleType="fitCenter"
                         android:background="@drawable/icon_button_style"
-                        android:src="@drawable/sound"/>
+                        android:src="@drawable/sound"
+                        android:contentDescription="@string/on_or_off_sounds" />
 
                 </LinearLayout>
 
@@ -94,7 +98,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Разработчик: Балдин Даниил (Steiden)"
+                android:text="@string/steiden"
                 android:textColor="@color/white"
                 android:textAlignment="center"
                 android:layout_alignParentBottom="true"

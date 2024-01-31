@@ -3,7 +3,6 @@ package com.example.rythmgame;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -11,18 +10,13 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import java.util.logging.Level;
-
 public class ChooseLevelActivity extends AppCompatActivity {
 
     SharedPreferences sharedPreferences;
 
-    // Получение компонентов activity
-    // ...
-
     // Переменные для работы приложения
+
     private Button selectedLevel;   // Выбранный уровень
-    private String selectedSong;    // Выбранная песня
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +30,7 @@ public class ChooseLevelActivity extends AppCompatActivity {
             ImageButton LevelImageButton = findViewById(R.id.LevelImageButton);
 
             // Установка обложки выбранной песни
-            selectedSong = sharedPreferences.getString("selectedSong", ChooseSongActivity.songName.get(0));
+            String selectedSong = sharedPreferences.getString("selectedSong", ChooseSongActivity.songName.get(0));
             LevelImageButton.setImageResource(ChooseSongActivity.songs.get(selectedSong));
 
             // Первый уровень выбран по умолчанию
@@ -48,13 +42,7 @@ public class ChooseLevelActivity extends AppCompatActivity {
         }
     }
 
-    public void backToActivityChooseSong(View view) {
-        // Переход к activity выбора песни
-        Intent i = new Intent(getApplicationContext(), ChooseSongActivity.class);
-        startActivity(i);
-    }
-
-
+    // Выбор уровня для песни
     public void selectLevel(View view) {
         if(selectedLevel != null) {
             // Возврат цвета старого выбранного уровня к начальному
@@ -67,8 +55,11 @@ public class ChooseLevelActivity extends AppCompatActivity {
         view.setBackgroundResource(R.drawable.button_level_selected_style);
     }
 
+    // Переходы между активити
+    public void startActivityChooseSong(View view) {
+        GameTransitionHelper.startChooseSongActivity(this);
+    }
     public void startActivityGame(View view) {
-        Intent i = new Intent(getApplicationContext(), Game.class);
-        startActivity(i);
+        GameTransitionHelper.startGameActivity(this);
     }
 }

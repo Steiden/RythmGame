@@ -31,17 +31,16 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // Переходы между активити
     public void startActivityChooseSong(View view) {
-        Intent i = new Intent(getApplicationContext(), ChooseSongActivity.class);
-        startActivity(i);
+        GameTransitionHelper.startChooseSongActivity(this);
     }
-
     public void startActivitySettings(View view) {
-        Intent i = new Intent(getApplication(), SettingsActivity.class);
-        startActivity(i);
+        GameTransitionHelper.startSettingsActivity(this);
     }
 
+    // Выход из игры
     public void ExitActivity(View view) {
-        this.finishAffinity();
+        finishAndRemoveTask();
     }
 }

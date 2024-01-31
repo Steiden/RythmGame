@@ -2,6 +2,7 @@ package com.example.rythmgame;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -22,8 +23,7 @@ public class Game extends AppCompatActivity {
 
     public View.OnClickListener getTest;
     private TextView timerTextView; // Текст таймера обратного отсчета
-
-    private CountDownTimer timer;
+    private CountDownTimer timer;   // Игровой таймер
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +39,7 @@ public class Game extends AppCompatActivity {
 
             // Запуск таймера
             timer = new CountDownTimer(3000, 1000) {
+                @SuppressLint("SetTextI18n")
                 public void onTick(long millisUntilFinished) {
                     timerTextView.setText("" + (millisUntilFinished / 1000 + 1));
                 }
@@ -55,9 +56,8 @@ public class Game extends AppCompatActivity {
         }
     }
 
-    public void backToChooseLevelActivity(View view) {
-        // Переключение на предыдущую activity
-        Intent i = new Intent(getApplicationContext(), ChooseLevelActivity.class);
-        startActivity(i);
+    // Переходы между активити
+    public void startChooseLevelActivity(View view) {
+        GameTransitionHelper.startChooseLevelActivity(this);
     }
 }

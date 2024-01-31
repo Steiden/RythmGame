@@ -15,7 +15,6 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public void backToMainActivity(View view) {
-        Intent i = new Intent(getApplicationContext(), MainActivity.class);
-        startActivity(i);
+        GameTransitionHelper.startMainActivity(this);
     }
 }

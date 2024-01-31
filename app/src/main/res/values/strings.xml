@@ -43,4 +43,26 @@
         libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
+    <string name="go_to_main_activity">Go to main activity</string>
+    <string name="text_settings">Настройки</string>
+    <string name="on_or_off_music">on or off music</string>
+    <string name="on_or_off_vibration">on or off vibration</string>
+    <string name="on_or_off_sounds">on or off sounds</string>
+    <string name="steiden">Разработчик: Балдин Даниил (Steiden)</string>
+    <string name="prev_song">prev song</string>
+    <string name="song_now">song now</string>
+    <string name="next_song">next song</string>
+    <string name="choose_song">ВЫБОР ПЕСНИ</string>
+    <string name="go_to_main_window">Go to main window</string>
+    <string name="song_name">Название песни</string>
+    <string name="author">автор</string>
+    <string name="_6">★6</string>
+    <string name="_9">★9</string>
+    <string name="play">Играть</string>
+    <string name="_2">★2</string>
+    <string name="back_to_choose_level_activity">back to choose level activity</string>
+    <string name="settings">Настройки</string>
+    <string name="exit">Выйти</string>
+    <string name="star">*</string>
+    <string name="game_title">Какое-то название</string>
 </resources>

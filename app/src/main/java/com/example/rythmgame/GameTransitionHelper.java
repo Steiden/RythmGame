@@ -20,7 +20,7 @@ public class GameTransitionHelper {
     }
 
     // Переход к активити ChooseLevel
-    public static void startLevelActivity(Context context) {
+    public static void startChooseLevelActivity(Context context) {
         context.startActivity(new Intent(context.getApplicationContext(), ChooseLevelActivity.class));
     }
 
