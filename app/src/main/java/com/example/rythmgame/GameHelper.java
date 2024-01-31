@@ -23,3 +23,4 @@ public class GameHelper {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, value, displayMetrics);
     }
 }
+
