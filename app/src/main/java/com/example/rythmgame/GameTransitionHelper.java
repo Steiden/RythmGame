@@ -26,6 +26,6 @@ public class GameTransitionHelper {
 
     // Переход к активити Game
     public static void startGameActivity(Context context) {
-        context.startActivity(new Intent(context.getApplicationContext(), Game.class));
+        context.startActivity(new Intent(context.getApplicationContext(), GameActivity.class));
     }
 }

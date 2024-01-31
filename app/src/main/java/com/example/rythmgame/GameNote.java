@@ -1,6 +1,7 @@
 package com.example.rythmgame;
 
 import android.content.Context;
+import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
@@ -22,6 +23,8 @@ public class GameNote {
     private Context context;    // Контекст класса игры
     private final RelativeLayout NoteContainerParent; // Родительский контейнер игры
 
+    private long clickTime;  // Время, за которое нажата нота
+
     // Конструктор
     public GameNote(Context context, RelativeLayout NoteContainerParent) {
         this.context = context;
@@ -36,6 +39,7 @@ public class GameNote {
     // Геттеры
     public View getNoteRing() { return this.NoteRing; }
     public Button getNoteButton() { return this.NoteButton; }
+    public long getClickTime() { return this.clickTime; }
 
     // Создание ноты
     public GameNote create() {
@@ -84,11 +88,25 @@ public class GameNote {
 
         // Добавление контейнера ноты в родительский Layout
         NoteContainerParent.addView(this.NoteContainer);
+
+        startClickTimer();
     }
 
     // Удаление ноты
     public void delete() {
         RelativeLayout NoteContainerParent = (RelativeLayout) this.NoteContainer.getParent();
         NoteContainerParent.removeView(this.NoteContainer);
+    }
+
+    // Запуск таймера для подсчета очков
+    private void startClickTimer() {
+        new CountDownTimer(1250, 50) {
+            public void onTick(long millisUntilFinished) {
+                clickTime = millisUntilFinished;
+            }
+            public void onFinish() {
+                clickTime = 0;
+            }
+        }.start();
     }
 }

@@ -37,6 +37,14 @@ public class GamePlay {
         this.accuracy = 0;
     }
 
+    // Сеттеры
+    private void setScore(int score) {
+        this.score += score;
+    }
+    private void setAccuracy(float accuracy) {
+        this.accuracy = (float) Math.round((this.accuracy + accuracy) / 2 * 100) / 100;
+    }
+
     // Создание и размещение ноты
     public void createAndPlaceNote() {
         // Установка текущей ноты
@@ -95,13 +103,38 @@ public class GamePlay {
     @SuppressLint("SetTextI18n")
     private void addActionsOnClickNote() {
         this.actualGameNote.getNoteButton().setOnClickListener(v -> {
+            // Получение времени нажатия на ноту
+            long clickTime = this.actualGameNote.getClickTime();
+
+            // Очки и точность к общим статистикам
+            int scoreToIncrease = 0;
+            float accuracyToIncrease = 0;
+
+            // Расчет количества очков и точности, исходя из времени нажатия на ноту
+            if(clickTime >= 450 && clickTime <= 1250) {
+                setScore(100);
+                setAccuracy(10);
+            }
+            else if(clickTime >= 250 && clickTime < 450) {
+                setScore(200);
+                setAccuracy(33.3f);
+            }
+            else if(clickTime >= 150 && clickTime < 250) {
+                setScore(300);
+                setAccuracy(50);
+            }
+            else if(clickTime >= 0 && clickTime < 150) {
+                setScore(500);
+                setAccuracy(100);
+            }
+
+            // Отображение статистики
+            scoreTextView.setText("" + this.score);
+            accuracyTextView.setText(this.accuracy + "%");
+
             // Анимация сужения кольца заканчивается
             this.noteRingAnimationScaleY.end();
             this.noteRingAnimationScaleX.end();
-
-            // Добавление очков к счету
-            this.score += 100;
-            this.scoreTextView.setText("" + this.score);
         });
     }
 }

@@ -10,7 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class Game extends AppCompatActivity {
+public class GameActivity extends AppCompatActivity {
 
     // Элементы активити
     private RelativeLayout gameContainer;
