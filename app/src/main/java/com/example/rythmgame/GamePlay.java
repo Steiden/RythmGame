@@ -34,15 +34,15 @@ public class GamePlay {
         this.scoreTextView = scoreTextView;
         this.accuracyTextView = accuracyTextView;
         this.score = 0;
-        this.accuracy = 0;
+        this.accuracy = 100;
     }
 
     // Сеттеры
     private void setScore(int score) {
         this.score += score;
     }
-    private void setAccuracy(float accuracy) {
-        this.accuracy = (float) Math.round((this.accuracy + accuracy) / 2 * 100) / 100;
+    private void setAccuracy(float value) {
+        this.accuracy = (float) Math.round((this.accuracy + value) / 2);
     }
 
     // Создание и размещение ноты
@@ -86,7 +86,6 @@ public class GamePlay {
         this.noteRingAnimationScaleX.addListener(new Animator.AnimatorListener() {
             public void onAnimationStart(@NonNull Animator animation) {}
             public void onAnimationEnd(@NonNull Animator animation) {
-                setAccuracy(0);
                 accuracyTextView.setText(accuracy + "%");
 
                 deleteNoteAndCreateAndPlaceNew();
@@ -109,24 +108,20 @@ public class GamePlay {
             // Получение времени нажатия на ноту
             long clickTime = this.actualGameNote.getClickTime();
 
-            // Очки и точность к общим статистикам
-            int scoreToIncrease = 0;
-            float accuracyToIncrease = 0;
-
             // Расчет количества очков и точности, исходя из времени нажатия на ноту
-            if(clickTime >= 450 && clickTime <= 1250) {
+            if(clickTime >= 750 && clickTime <= 1250) {
                 setScore(100);
                 setAccuracy(10);
             }
-            else if(clickTime >= 250 && clickTime < 450) {
+            else if(clickTime >= 450 && clickTime < 750) {
                 setScore(200);
                 setAccuracy(33.3f);
             }
-            else if(clickTime >= 150 && clickTime < 250) {
+            else if(clickTime >= 250 && clickTime < 450) {
                 setScore(300);
                 setAccuracy(50);
             }
-            else if(clickTime >= 0 && clickTime < 150) {
+            else if(clickTime >= 0 && clickTime < 250) {
                 setScore(500);
                 setAccuracy(100);
             }
