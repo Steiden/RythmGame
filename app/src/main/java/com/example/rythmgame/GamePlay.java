@@ -86,6 +86,7 @@ public class GamePlay {
         this.noteRingAnimationScaleX.addListener(new Animator.AnimatorListener() {
             public void onAnimationStart(@NonNull Animator animation) {}
             public void onAnimationEnd(@NonNull Animator animation) {
+                setAccuracy(0);
                 deleteNoteAndCreateAndPlaceNew();
             }
             public void onAnimationCancel(@NonNull Animator animation) {}
