@@ -87,6 +87,8 @@ public class GamePlay {
             public void onAnimationStart(@NonNull Animator animation) {}
             public void onAnimationEnd(@NonNull Animator animation) {
                 setAccuracy(0);
+                accuracyTextView.setText(accuracy + "%");
+
                 deleteNoteAndCreateAndPlaceNew();
             }
             public void onAnimationCancel(@NonNull Animator animation) {}

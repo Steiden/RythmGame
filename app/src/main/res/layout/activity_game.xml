@@ -49,6 +49,8 @@
                     android:id="@+id/scoreTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textAlignment="textEnd"
                     android:textColor="@color/white"/>
 
                 <TextView
@@ -56,8 +58,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
+                    android:text="100%"
                     android:textAlignment="textEnd"
-                    android:text="87%"
                     android:textColor="@color/white"/>
 
             </LinearLayout>
