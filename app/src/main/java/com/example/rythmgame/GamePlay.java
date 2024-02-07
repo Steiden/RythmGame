@@ -15,6 +15,8 @@ public class GamePlay {
     private GameNote actualGameNote;  // Текущая нота
     private int score;  // Счет
     private float accuracy; // Точность
+    private int scoreToIncrease;    // Счет прибавляемый
+    private float accuracyToIncrease;    // Точность приблавляемая
 
     // Переменные для анимаций
     ObjectAnimator noteRingAnimationScaleX; // Анимация сужения кольца ноты по оси X
@@ -40,9 +42,12 @@ public class GamePlay {
     // Сеттеры
     private void setScore(int score) {
         this.score += score;
+        scoreToIncrease = 0;
     }
+
     private void setAccuracy(float value) {
-        this.accuracy = (float) Math.round((this.accuracy + value) / 2);
+        this.accuracy = (float) Math.round((this.accuracy + value) / 2 * 100) / 100;
+        accuracyToIncrease = 0;
     }
 
     // Создание и размещение ноты
@@ -84,12 +89,24 @@ public class GamePlay {
 
         // Удаление ноты по окончанию анимации
         this.noteRingAnimationScaleX.addListener(new Animator.AnimatorListener() {
-            public void onAnimationStart(@NonNull Animator animation) {}
+            public void onAnimationStart(@NonNull Animator animation) {
+            }
             public void onAnimationEnd(@NonNull Animator animation) {
+                // Установка точности и счета
+                setScore(scoreToIncrease);
+                setAccuracy(accuracyToIncrease);
+
+                // Отображение статистики
+                scoreTextView.setText("" + score);
+                accuracyTextView.setText(accuracy + "%");
+
+                // Удаление текущей ноты и размещение новой
                 deleteNoteAndCreateAndPlaceNew();
             }
-            public void onAnimationCancel(@NonNull Animator animation) {}
-            public void onAnimationRepeat(@NonNull Animator animation) {}
+            public void onAnimationCancel(@NonNull Animator animation) {
+            }
+            public void onAnimationRepeat(@NonNull Animator animation) {
+            }
         });
     }
 
@@ -107,30 +124,19 @@ public class GamePlay {
             long clickTime = this.actualGameNote.getClickTime();
 
             // Расчет количества очков и точности, исходя из времени нажатия на ноту
-            if(clickTime >= 750 && clickTime <= 1250) {
-                setScore(100);
-                setAccuracy(10);
+            if (clickTime >= 750 && clickTime <= 1250) {
+                scoreToIncrease = 100;
+                accuracyToIncrease = 10;
+            } else if (clickTime >= 450 && clickTime < 750) {
+                scoreToIncrease = 200;
+                accuracyToIncrease = 33.3f;
+            } else if (clickTime >= 250 && clickTime < 450) {
+                scoreToIncrease = 300;
+                accuracyToIncrease = 50;
+            } else if (clickTime > 0 && clickTime < 250) {
+                scoreToIncrease = 500;
+                accuracyToIncrease = 100;
             }
-            else if(clickTime >= 450 && clickTime < 750) {
-                setScore(200);
-                setAccuracy(33.3f);
-            }
-            else if(clickTime >= 250 && clickTime < 450) {
-                setScore(300);
-                setAccuracy(50);
-            }
-            else if(clickTime > 0 && clickTime < 250) {
-                setScore(500);
-                setAccuracy(100);
-            }
-            else {
-                setScore(0);
-                setAccuracy(0);
-            }
-
-            // Отображение статистики
-            scoreTextView.setText("" + this.score);
-            accuracyTextView.setText(this.accuracy + "%");
 
             // Анимация сужения кольца заканчивается
             this.noteRingAnimationScaleY.end();
