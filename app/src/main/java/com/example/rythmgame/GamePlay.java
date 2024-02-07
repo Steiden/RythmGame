@@ -86,8 +86,6 @@ public class GamePlay {
         this.noteRingAnimationScaleX.addListener(new Animator.AnimatorListener() {
             public void onAnimationStart(@NonNull Animator animation) {}
             public void onAnimationEnd(@NonNull Animator animation) {
-                accuracyTextView.setText(accuracy + "%");
-
                 deleteNoteAndCreateAndPlaceNew();
             }
             public void onAnimationCancel(@NonNull Animator animation) {}
@@ -121,9 +119,13 @@ public class GamePlay {
                 setScore(300);
                 setAccuracy(50);
             }
-            else if(clickTime >= 0 && clickTime < 250) {
+            else if(clickTime > 0 && clickTime < 250) {
                 setScore(500);
                 setAccuracy(100);
+            }
+            else {
+                setScore(0);
+                setAccuracy(0);
             }
 
             // Отображение статистики

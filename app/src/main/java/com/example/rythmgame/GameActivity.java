@@ -10,6 +10,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 public class GameActivity extends AppCompatActivity {
 
     // Элементы активити
@@ -49,9 +51,9 @@ public class GameActivity extends AppCompatActivity {
                             .createAndPlaceNote();
                 }
             }.start();
-
         } catch (Exception ex) {
-            Toast.makeText(this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+            System.out.println("Error: " + ex.getMessage());
+            Toast.makeText(this, "Error: " + ex.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
