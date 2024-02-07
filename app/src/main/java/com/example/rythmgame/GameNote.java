@@ -95,7 +95,7 @@ public class GameNote {
     // Удаление ноты
     public void delete() {
         RelativeLayout NoteContainerParent = (RelativeLayout) this.NoteContainer.getParent();
-        NoteContainerParent.removeView(this.NoteContainer);
+        NoteContainerParent.removeView(NoteContainer);
     }
 
     // Запуск таймера для подсчета очков

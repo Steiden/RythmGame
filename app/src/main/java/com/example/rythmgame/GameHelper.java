@@ -8,6 +8,8 @@ import java.util.Random;
 
 public class GameHelper {
 
+    // Статичные переменные
+
     // Получение случайной позиции
     public static float getRandomPos(float max) {
         Random rand = new Random();

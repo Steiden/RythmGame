@@ -4,6 +4,11 @@ import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.CountDownTimer;
+import android.os.Vibrator;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -28,13 +33,15 @@ public class GamePlay {
     private final RelativeLayout NoteContainerParent;   // Контейнер для размещения нот
     private final TextView scoreTextView;   // TextView для счета
     private final TextView accuracyTextView;    // TextView для точности
+    private final View trackbar;    // View для продолжительности песни
 
     // Конструктор класса
-    public GamePlay(Context context, RelativeLayout NoteContainerParent, TextView scoreTextView, TextView accuracyTextView) {
+    public GamePlay(Context context, RelativeLayout NoteContainerParent, TextView scoreTextView, TextView accuracyTextView, View trackbar) {
         GamePlay.context = context;
         this.NoteContainerParent = NoteContainerParent;
         this.scoreTextView = scoreTextView;
         this.accuracyTextView = accuracyTextView;
+        this.trackbar = trackbar;
         this.score = 0;
         this.accuracy = 100;
     }
@@ -48,6 +55,25 @@ public class GamePlay {
     private void setAccuracy(float value) {
         this.accuracy = (float) Math.round((this.accuracy + value) / 2 * 100) / 100;
         accuracyToIncrease = 0;
+    }
+
+    // Начало игры
+    public void startGame() {
+        // Запуск трекбара
+        startTrackbar(60000);
+
+        // Создание и размещение ноты
+        createAndPlaceNote();
+    }
+
+    // Закрытие игры
+    public void closeGame() {
+        // Удаление анимаций
+        noteRingAnimationScaleX.removeAllListeners();
+        noteRingAnimationScaleY.removeAllListeners();
+
+        // Удаление текущей ноты
+        this.actualGameNote.delete();
     }
 
     // Создание и размещение ноты
@@ -91,7 +117,11 @@ public class GamePlay {
         this.noteRingAnimationScaleX.addListener(new Animator.AnimatorListener() {
             public void onAnimationStart(@NonNull Animator animation) {
             }
+
             public void onAnimationEnd(@NonNull Animator animation) {
+                // Вызов событий при клике
+                startVibration();
+
                 // Установка точности и счета
                 setScore(scoreToIncrease);
                 setAccuracy(accuracyToIncrease);
@@ -103,8 +133,10 @@ public class GamePlay {
                 // Удаление текущей ноты и размещение новой
                 deleteNoteAndCreateAndPlaceNew();
             }
+
             public void onAnimationCancel(@NonNull Animator animation) {
             }
+
             public void onAnimationRepeat(@NonNull Animator animation) {
             }
         });
@@ -142,5 +174,21 @@ public class GamePlay {
             this.noteRingAnimationScaleY.end();
             this.noteRingAnimationScaleX.end();
         });
+    }
+
+    // Запуск трекбара
+    private void startTrackbar(int songDuration) {
+        // Настройка и запуск анимации трекбара
+        ObjectAnimator.ofFloat(trackbar,
+                "scaleX", 1f, 1000.0f)
+                .setDuration(songDuration)
+                .start();
+    }
+
+    // Запуск вибрации
+    private void startVibration() {
+        if(GameActivity.vibrator.hasVibrator()) {
+            GameActivity.vibrator.vibrate(100);
+        }
     }
 }
