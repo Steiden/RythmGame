@@ -2,18 +2,21 @@ package com.example.rythmgame;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.CountDownTimer;
-import android.os.Vibrator;
+import android.media.MediaPlayer;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
+import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GamePlay {
     // Игровые переменные
@@ -34,16 +37,23 @@ public class GamePlay {
     private final TextView scoreTextView;   // TextView для счета
     private final TextView accuracyTextView;    // TextView для точности
     private final View trackbar;    // View для продолжительности песни
+    private final MediaPlayer songMusic;    // Игровая музыка
+
+    // Другое
+    private ArrayList<Float> accuracyList;
 
     // Конструктор класса
-    public GamePlay(Context context, RelativeLayout NoteContainerParent, TextView scoreTextView, TextView accuracyTextView, View trackbar) {
+    public GamePlay(Context context, RelativeLayout NoteContainerParent, TextView scoreTextView, TextView accuracyTextView, View trackbar, MediaPlayer songMusic) {
         GamePlay.context = context;
         this.NoteContainerParent = NoteContainerParent;
         this.scoreTextView = scoreTextView;
         this.accuracyTextView = accuracyTextView;
         this.trackbar = trackbar;
+        this.songMusic = songMusic;
+
         this.score = 0;
         this.accuracy = 100;
+        this.accuracyList = new ArrayList<>();
     }
 
     // Сеттеры
@@ -52,15 +62,26 @@ public class GamePlay {
         scoreToIncrease = 0;
     }
 
-    private void setAccuracy(float value) {
-        this.accuracy = (float) Math.round((this.accuracy + value) / 2 * 100) / 100;
+    private void setAccuracy(float accuracy) {
+        accuracyList.add(accuracy);
+
+        // Подсчет общей суммы точности
+        float accuracySum = 0;
+        for (float el : accuracyList) {
+            accuracySum += el;
+        }
+
+        this.accuracy = (float) Math.round((accuracySum / accuracyList.size()) * 100) / 100;
         accuracyToIncrease = 0;
     }
 
     // Начало игры
     public void startGame() {
         // Запуск трекбара
-        startTrackbar(60000);
+        startTrackbar(songMusic.getDuration());
+
+        // Запуск музыки
+        songMusic.start();
 
         // Создание и размещение ноты
         createAndPlaceNote();
@@ -74,6 +95,9 @@ public class GamePlay {
 
         // Удаление текущей ноты
         this.actualGameNote.delete();
+
+        // Завершение музыки
+        if(songMusic.isPlaying()) songMusic.release();
     }
 
     // Создание и размещение ноты
@@ -179,10 +203,19 @@ public class GamePlay {
     // Запуск трекбара
     private void startTrackbar(int songDuration) {
         // Настройка и запуск анимации трекбара
-        ObjectAnimator.ofFloat(trackbar,
-                "scaleX", 1f, 1000.0f)
-                .setDuration(songDuration)
-                .start();
+        ValueAnimator trackbarAnimator = ValueAnimator.ofInt(0, GameHelper.transformPxToDp(GameHelper.screenWidth))
+                        .setDuration(songDuration);
+
+        trackbarAnimator.addUpdateListener(animation -> {
+            int animatedValue = (int) animation.getAnimatedValue();
+
+            ViewGroup.LayoutParams params = this.trackbar.getLayoutParams();
+            params.width = animatedValue;
+
+            this.trackbar.setLayoutParams(params);
+        });
+
+        trackbarAnimator.start();
     }
 
     // Запуск вибрации

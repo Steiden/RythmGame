@@ -18,8 +18,8 @@
 
             <View
                 android:id="@+id/trackbar"
-                android:layout_width="1dp"
-                android:layout_height="1dp"
+                android:layout_width="0dp"
+                android:layout_height="2dp"
                 android:layout_centerVertical="true"
                 android:background="@drawable/shape_line" />
 
@@ -70,7 +70,7 @@
         <RelativeLayout
             android:id="@+id/gameContainer"
             android:layout_width="match_parent"
-            android:layout_height="650dp">
+            android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/timerTextView"
@@ -81,6 +81,23 @@
                 android:textSize="100sp"
                 android:textStyle="bold"
                 android:translationY="-60dp" />
+
+<!--            <RelativeLayout-->
+<!--                android:layout_width="150dp"-->
+<!--                android:layout_height="150dp">-->
+<!--                -->
+<!--                <View-->
+<!--                    android:layout_width="50dp"-->
+<!--                    android:layout_height="50dp"-->
+<!--                    android:layout_centerInParent="true"-->
+<!--                    android:background="@drawable/shape_oval"/>-->
+<!--                <View-->
+<!--                    android:layout_width="150dp"-->
+<!--                    android:layout_height="150dp"-->
+<!--                    android:layout_centerInParent="true"-->
+<!--                    android:background="@drawable/shape_ring"/>-->
+<!--                -->
+<!--            </RelativeLayout>-->
 
         </RelativeLayout>
 

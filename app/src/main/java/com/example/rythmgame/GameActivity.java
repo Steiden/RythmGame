@@ -4,19 +4,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Vibrator;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.ContentInfo;
-import android.view.Display;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.util.Objects;
 
 public class GameActivity extends AppCompatActivity {
 
@@ -28,6 +24,7 @@ public class GameActivity extends AppCompatActivity {
     private TextView scoreTextView;
     private TextView accuracyTextView;
     private View trackbar;
+    private MediaPlayer songMusic;
 
     private TextView timerTextView; // Текст таймера обратного отсчета
 
@@ -49,6 +46,8 @@ public class GameActivity extends AppCompatActivity {
             accuracyTextView = findViewById(R.id.accuracyTextView);
             // Получение View трекбара
             trackbar = findViewById(R.id.trackbar);
+            // Получение музыки для игры
+            songMusic = MediaPlayer.create(this, R.raw.komarovo);
 
             // Получение timerTextView
             timerTextView = findViewById(R.id.timerTextView);
@@ -65,7 +64,7 @@ public class GameActivity extends AppCompatActivity {
                     timerTextView.setText("");
 
                     // Запуск игры
-                    gamePlay = new GamePlay(getApplicationContext(), gameContainer, scoreTextView, accuracyTextView, trackbar);
+                    gamePlay = new GamePlay(getApplicationContext(), gameContainer, scoreTextView, accuracyTextView, trackbar, songMusic);
                     gamePlay.startGame();
                 }
             }.start();

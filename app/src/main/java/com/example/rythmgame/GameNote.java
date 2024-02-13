@@ -2,38 +2,51 @@ package com.example.rythmgame;
 
 import android.content.Context;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 public class GameNote {
 
     // Константы
-    private final int MAX_SCALE = 175; // Максимальный размер ноты
-    private final int MIN_SCALE = 50;  // Минимальный размер ноты
-    private final int MAX_POSITION_X = 250; // Максимальное значение расположения по оси X
-    private final int MAX_POSITION_Y = 500; // Максимальное значение расположения по оси Y
+    private final int MAX_SCALE = GameHelper.transformDpToPx(GameHelper.screenWidth / 3); // Максимальный размер ноты
+    private final int MIN_SCALE = GameHelper.transformDpToPx(GameHelper.screenWidth / 9);  // Минимальный размер ноты
+
+    private final int MIN_POSITION_X;   // Минимальное значение расположения по оси X
+    private final int MIN_POSITION_Y;   // Минимальное значение расположения по оси Y
+    private final int MAX_POSITION_X; // Максимальное значение расположения по оси X
+    private final int MAX_POSITION_Y; // Максимальное значение расположения по оси Y
 
     // Элементы ноты
-    private RelativeLayout NoteContainer;   // Ограничивающий контейнер
-    private View NoteRing;  // Сужающееся кольцо ноты
-    private Button NoteButton;  // Нота
+    private final RelativeLayout NoteContainer;   // Ограничивающий контейнер
+    private final View NoteRing;  // Сужающееся кольцо ноты
+    private final Button NoteButton;  // Нота
 
-    // Переменные для рамещения ноты
-    private Context context;    // Контекст класса игры
     private final RelativeLayout NoteContainerParent; // Родительский контейнер игры
 
     private long clickTime;  // Время, за которое нажата нота
 
     // Конструктор
     public GameNote(Context context, RelativeLayout NoteContainerParent) {
-        this.context = context;
+        // Переменные для рамещения ноты
         this.NoteContainerParent = NoteContainerParent;
 
         // Инициализация элементов нот
         NoteContainer = new RelativeLayout(context);
         NoteRing = new View(context);
         NoteButton = new Button(context);
+
+        // Получение ширины и высоты родительского контейнера ноты
+        int noteContainerParentWidth = this.NoteContainerParent.getWidth();
+        int noteContainerParentHeight = this.NoteContainerParent.getHeight();
+
+        // Установка макс и мин значения для расположения ноты по осям X и Y
+        this.MIN_POSITION_X = (int) (0 + (noteContainerParentWidth * 0.1));
+        this.MIN_POSITION_Y = (int) (0 + (noteContainerParentHeight * 0.1));
+        this.MAX_POSITION_X = (int) (noteContainerParentWidth - (noteContainerParentWidth * 0.1));
+        this.MAX_POSITION_Y = (int) (noteContainerParentHeight - (noteContainerParentHeight * 0.1));
     }
 
     // Геттеры
@@ -43,19 +56,15 @@ public class GameNote {
 
     // Создание ноты
     public GameNote create() {
-        // Преобразование макс. значений из px в dp
-        int maxScaleValue = GameHelper.transformPxToDp(this.MAX_SCALE);
-        int minScaleValue = GameHelper.transformPxToDp(this.MIN_SCALE);
-
         // Параметры контейнера
-        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(maxScaleValue, maxScaleValue);
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(MAX_SCALE, MAX_SCALE);
 
         // Параметры кольца
-        RelativeLayout.LayoutParams ringParams = new RelativeLayout.LayoutParams(maxScaleValue, maxScaleValue);
+        RelativeLayout.LayoutParams ringParams = new RelativeLayout.LayoutParams(MAX_SCALE, MAX_SCALE);
         ringParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
 
         // Параметры ноты
-        RelativeLayout.LayoutParams noteParams = new RelativeLayout.LayoutParams(minScaleValue, minScaleValue);
+        RelativeLayout.LayoutParams noteParams = new RelativeLayout.LayoutParams(MIN_SCALE, MIN_SCALE);
         noteParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
 
         // Установка размеров контейнеру
@@ -78,13 +87,9 @@ public class GameNote {
 
     // Размещение ноты
     public void place() {
-        // Преобразование макс. позиций по X и Y в величину dp
-        int maxPosXTransformed = GameHelper.transformPxToDp(this.MAX_POSITION_X);
-        int maxPosYTransformed = GameHelper.transformPxToDp(this.MAX_POSITION_Y);
-
         // Установка смещения контейнера ноты в родителе
-        NoteContainer.setTranslationX(GameHelper.getRandomPos(maxPosXTransformed));
-        NoteContainer.setTranslationY(GameHelper.getRandomPos(maxPosYTransformed));
+        NoteContainer.setTranslationX(GameHelper.getRandomPos(MIN_POSITION_X, MAX_POSITION_X));
+        NoteContainer.setTranslationY(GameHelper.getRandomPos(MIN_POSITION_Y, MAX_POSITION_Y));
 
         // Добавление контейнера ноты в родительский Layout
         NoteContainerParent.addView(this.NoteContainer);
