@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".GameActivity"
+    android:background="@color/blackBackground">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:paddingHorizontal="10dp">
+
+            <View
+                android:id="@+id/trackbar"
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:layout_centerVertical="true"
+                android:background="@drawable/shape_line" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:paddingHorizontal="10dp">
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="20dp"
+                android:layout_centerVertical="true"
+                android:background="@color/transparent"
+                android:src="@drawable/pause"
+                android:contentDescription="@string/back_to_choose_level_activity"
+                android:onClick="startChooseLevelActivity"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/noteCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="notes: 114"
+                    android:textSize="16sp"
+                    android:textColor="@color/white"/>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/gameContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/timerTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textColor="@color/white"
+                android:textSize="100sp"
+                android:textStyle="bold"
+                android:translationY="-60dp" />
+
+            <!--            <RelativeLayout-->
+            <!--                android:layout_width="150dp"-->
+            <!--                android:layout_height="150dp">-->
+            <!--                -->
+            <!--                <View-->
+            <!--                    android:layout_width="50dp"-->
+            <!--                    android:layout_height="50dp"-->
+            <!--                    android:layout_centerInParent="true"-->
+            <!--                    android:background="@drawable/shape_oval"/>-->
+            <!--                <View-->
+            <!--                    android:layout_width="150dp"-->
+            <!--                    android:layout_height="150dp"-->
+            <!--                    android:layout_centerInParent="true"-->
+            <!--                    android:background="@drawable/shape_ring"/>-->
+            <!--                -->
+            <!--            </RelativeLayout>-->
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
