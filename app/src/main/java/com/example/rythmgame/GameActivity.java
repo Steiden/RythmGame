@@ -20,11 +20,15 @@ public class GameActivity extends AppCompatActivity {
     public static Vibrator vibrator;
 
     // Элементы активити
-    private RelativeLayout gameContainer;
-    private TextView scoreTextView;
-    private TextView accuracyTextView;
-    private View trackbar;
-    private MediaPlayer songMusic;
+    @SuppressLint("StaticFieldLeak")
+    public static RelativeLayout gameContainer;
+    @SuppressLint("StaticFieldLeak")
+    public static TextView scoreTextView;
+    @SuppressLint("StaticFieldLeak")
+    public static TextView accuracyTextView;
+    @SuppressLint("StaticFieldLeak")
+    public static View trackbar;
+    public static MediaPlayer songMusic;
 
     private TextView timerTextView; // Текст таймера обратного отсчета
 
@@ -64,7 +68,7 @@ public class GameActivity extends AppCompatActivity {
                     timerTextView.setText("");
 
                     // Запуск игры
-                    gamePlay = new GamePlay(getApplicationContext(), gameContainer, scoreTextView, accuracyTextView, trackbar, songMusic);
+                    gamePlay = new GamePlay(getApplicationContext());
                     gamePlay.startGame();
                 }
             }.start();

@@ -5,7 +5,9 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.media.MediaPlayer;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
@@ -36,20 +38,20 @@ public class GamePlay {
     private final RelativeLayout NoteContainerParent;   // Контейнер для размещения нот
     private final TextView scoreTextView;   // TextView для счета
     private final TextView accuracyTextView;    // TextView для точности
-    private final View trackbar;    // View для продолжительности песни
+    private final View trackbar;    // Трекбар для продолжительности уровня
     private final MediaPlayer songMusic;    // Игровая музыка
 
     // Другое
-    private ArrayList<Float> accuracyList;
+    private final ArrayList<Float> accuracyList;
 
     // Конструктор класса
-    public GamePlay(Context context, RelativeLayout NoteContainerParent, TextView scoreTextView, TextView accuracyTextView, View trackbar, MediaPlayer songMusic) {
+    public GamePlay(Context context) {
         GamePlay.context = context;
-        this.NoteContainerParent = NoteContainerParent;
-        this.scoreTextView = scoreTextView;
-        this.accuracyTextView = accuracyTextView;
-        this.trackbar = trackbar;
-        this.songMusic = songMusic;
+        this.NoteContainerParent = GameActivity.gameContainer;
+        this.scoreTextView = GameActivity.scoreTextView;
+        this.accuracyTextView = GameActivity.accuracyTextView;
+        this.trackbar = GameActivity.trackbar;
+        this.songMusic = GameActivity.songMusic;
 
         this.score = 0;
         this.accuracy = 100;
@@ -80,6 +82,9 @@ public class GamePlay {
         // Запуск трекбара
         startTrackbar(songMusic.getDuration());
 
+        // При окончании музыки, уровень закрывается
+        songMusic.setOnCompletionListener(mp -> closeGame());
+
         // Запуск музыки
         songMusic.start();
 
@@ -98,6 +103,9 @@ public class GamePlay {
 
         // Завершение музыки
         if(songMusic.isPlaying()) songMusic.release();
+
+        // Переход на следующую активити
+        GameTransitionHelper.startChooseLevelActivity(context);
     }
 
     // Создание и размещение ноты
@@ -143,9 +151,6 @@ public class GamePlay {
             }
 
             public void onAnimationEnd(@NonNull Animator animation) {
-                // Вызов событий при клике
-                startVibration();
-
                 // Установка точности и счета
                 setScore(scoreToIncrease);
                 setAccuracy(accuracyToIncrease);
@@ -194,6 +199,14 @@ public class GamePlay {
                 accuracyToIncrease = 100;
             }
 
+            // Запуск вибрации
+            startVibration();
+
+            // Проигрывание звука нажатия
+            MediaPlayer osuSound = MediaPlayer.create(context, R.raw.osu_hit_sound);
+            osuSound.setOnCompletionListener(mp -> osuSound.release());
+            osuSound.start();
+
             // Анимация сужения кольца заканчивается
             this.noteRingAnimationScaleY.end();
             this.noteRingAnimationScaleX.end();
@@ -203,18 +216,22 @@ public class GamePlay {
     // Запуск трекбара
     private void startTrackbar(int songDuration) {
         // Настройка и запуск анимации трекбара
-        ValueAnimator trackbarAnimator = ValueAnimator.ofInt(0, GameHelper.transformPxToDp(GameHelper.screenWidth))
+        ValueAnimator trackbarAnimator = ValueAnimator.ofInt(0,
+                        GameHelper.transformDpToPx((int) (GameHelper.screenWidth - (GameHelper.screenWidth * 0.2))))
                         .setDuration(songDuration);
+        trackbarAnimator.setInterpolator(new LinearInterpolator());
 
         trackbarAnimator.addUpdateListener(animation -> {
+            // Получение текущего значения ширины трекбара
             int animatedValue = (int) animation.getAnimatedValue();
 
+            // Установка текущих размеров трекбару
             ViewGroup.LayoutParams params = this.trackbar.getLayoutParams();
             params.width = animatedValue;
-
             this.trackbar.setLayoutParams(params);
         });
 
+        // Запуск анимации трекбара
         trackbarAnimator.start();
     }
 

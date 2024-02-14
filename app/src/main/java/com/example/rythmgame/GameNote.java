@@ -43,10 +43,10 @@ public class GameNote {
         int noteContainerParentHeight = this.NoteContainerParent.getHeight();
 
         // Установка макс и мин значения для расположения ноты по осям X и Y
-        this.MIN_POSITION_X = (int) (0 + (noteContainerParentWidth * 0.1));
-        this.MIN_POSITION_Y = (int) (0 + (noteContainerParentHeight * 0.1));
-        this.MAX_POSITION_X = (int) (noteContainerParentWidth - (noteContainerParentWidth * 0.1));
-        this.MAX_POSITION_Y = (int) (noteContainerParentHeight - (noteContainerParentHeight * 0.1));
+        this.MIN_POSITION_X = (int) (0 + (noteContainerParentWidth * 0.2));
+        this.MIN_POSITION_Y = (int) (0 + (noteContainerParentHeight * 0.2));
+        this.MAX_POSITION_X = (int) (noteContainerParentWidth - (noteContainerParentWidth * 0.2));
+        this.MAX_POSITION_Y = (int) (noteContainerParentHeight - (noteContainerParentHeight * 0.2));
     }
 
     // Геттеры
