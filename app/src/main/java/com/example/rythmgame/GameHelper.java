@@ -1,13 +1,13 @@
 package com.example.rythmgame;
 
-import android.content.Context;
-import android.media.MediaPlayer;
+import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
+import android.os.CountDownTimer;
 import android.util.DisplayMetrics;
-import android.util.Log;
-import android.util.TypedValue;
-import android.view.Display;
-import android.view.WindowManager;
-import android.widget.Toast;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.LinearInterpolator;
+import android.widget.TextView;
 
 //import net.beadsproject.beads.analysis.BeatDetect;
 //import net.beadsproject.beads.analysis.FeatureExtractor;
@@ -51,31 +51,39 @@ public class GameHelper {
         return GamePlay.context.getResources().getDisplayMetrics().heightPixels;
     }
 
-//    public static int getBpm(MediaPlayer music) {
-//        AudioContext ac = new AudioContext(new AudioIO.Default());
-//        AudioFileReader afr = new AudioFileReader(ac, 4096);
-//        String audioFilePath = AUDIO_FILE_NAME;
+    // Интерфейс принимаемой функции для выполнения какого-либо действия
+    interface ActionFunction {
+        void action(long millisUntilFinished);
+    }
+
+//    public static void startTimer(long duration, long interval, ActionFunction actionOnTick, ActionFunction actionOnFinish) {
+//        new CountDownTimer(3000, 1000) {
 //
-//        try {
-//            AssetFileDescriptor afd = getAssets().openFd(audioFilePath);
-//            float durationInSeconds = afd.getLength() / (float) afd.getSampleRate() / afd.getFormat().getChannelCount() / 2;
-//            BeatDetect beatDetect = new BeatDetect(durationInSeconds);
-//            WaveformAnalyzer waveformAnalyzer = new WaveformAnalyzer(ac, 70);
-//
-//            ac.out.addDependent(waveformAnalyzer);
-//            ac.start();
-//
-//            MediaPlayer mediaPlayer = new MediaPlayer();
-//            mediaPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
-//            mediaPlayer.prepare();
-//            mediaPlayer.start();
-//            mediaPlayer.setOnCompletionListener(mp -> {
-//                float bpm = beatDetect.getBPM();
-//                System.out.println("BPM аудиофайла: " + bpm);
-//                mediaPlayer.release();
-//            });
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+//            public void onTick(long millisUntilFinished) { actionOnTick.action(millisUntilFinished); }
+//            public void onFinish() {
+//                actionOnFinish.action(0);
+//            }
+//        }.start();
 //    }
+
+    public static void startTrackbar(View trackbar, int songDuration) {
+        // Настройка и запуск анимации трекбара
+        ValueAnimator trackbarAnimator = ValueAnimator.ofInt(0,
+                        GameHelper.transformDpToPx((int) (GameHelper.screenWidth - (GameHelper.screenWidth * 0.2))))
+                .setDuration(songDuration);
+        trackbarAnimator.setInterpolator(new LinearInterpolator());
+
+        trackbarAnimator.addUpdateListener(animation -> {
+            // Получение текущего значения ширины трекбара
+            int animatedValue = (int) animation.getAnimatedValue();
+
+            // Установка текущих размеров трекбару
+            ViewGroup.LayoutParams params = trackbar.getLayoutParams();
+            params.width = animatedValue;
+            trackbar.setLayoutParams(params);
+        });
+
+        // Запуск анимации трекбара
+        trackbarAnimator.start();
+    }
 }

@@ -29,10 +29,9 @@ public class GameActivity extends AppCompatActivity {
     @SuppressLint("StaticFieldLeak")
     public static View trackbar;
     public static MediaPlayer songMusic;
-
     private TextView timerTextView; // Текст таймера обратного отсчета
 
-    GamePlay gamePlay;
+    private GamePlay gamePlay;
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +40,7 @@ public class GameActivity extends AppCompatActivity {
             setContentView(R.layout.activity_game);
 
             // Событие при нажатии на кнопку паузы
-            findViewById(R.id.pauseButton).setOnClickListener(v ->
-                    GameTransitionHelper.startChooseLevelActivity(this));
+            findViewById(R.id.pauseButton).setOnClickListener(v -> gamePlay.closeGame());
 
             // Получение данных о смартфоне
             vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
@@ -63,23 +61,23 @@ public class GameActivity extends AppCompatActivity {
 
             // Запуск таймера
             new CountDownTimer(3000, 1000) {
-                @SuppressLint("SetTextI18n")
                 public void onTick(long millisUntilFinished) {
-                    // Таймер отсчета до начала игры
-                    timerTextView.setText("" + (millisUntilFinished / 1000 + 1));
+                    timerTextView.setText(String.valueOf(millisUntilFinished / 1000 + 1));
                 }
-
                 public void onFinish() {
                     timerTextView.setText("");
-
-                    // Запуск игры
-                    gamePlay = new GamePlay(getApplicationContext());
-                    gamePlay.startGame();
+                    startGame();
                 }
             }.start();
+
         } catch (Exception ex) {
             Log.e("GameActivity", "Error: " + ex.getMessage());
             Toast.makeText(this, "Error: " + ex.getMessage(), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void startGame() {
+        gamePlay = new GamePlay(this);
+        gamePlay.startGame();
     }
 }

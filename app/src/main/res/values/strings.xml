@@ -67,4 +67,6 @@
     <string name="game_title">Какое-то название</string>
     <string name="_default_score">0</string>
     <string name="_default_accuracy">100%</string>
+    <string name="create">Создать</string>
+    <string name="notes_default_value">notes: 0</string>
 </resources>

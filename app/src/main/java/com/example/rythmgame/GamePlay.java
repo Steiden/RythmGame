@@ -80,7 +80,7 @@ public class GamePlay {
     // Начало игры
     public void startGame() {
         // Запуск трекбара
-        startTrackbar(songMusic.getDuration());
+        GameHelper.startTrackbar(this.trackbar, songMusic.getDuration());
 
         // При окончании музыки, уровень закрывается
         songMusic.setOnCompletionListener(mp -> closeGame());
@@ -102,7 +102,7 @@ public class GamePlay {
         this.actualGameNote.delete();
 
         // Завершение музыки
-        if(songMusic.isPlaying()) songMusic.release();
+        songMusic.release();
 
         // Переход на следующую активити
         GameTransitionHelper.startChooseLevelActivity(context);
@@ -211,28 +211,6 @@ public class GamePlay {
             this.noteRingAnimationScaleY.end();
             this.noteRingAnimationScaleX.end();
         });
-    }
-
-    // Запуск трекбара
-    private void startTrackbar(int songDuration) {
-        // Настройка и запуск анимации трекбара
-        ValueAnimator trackbarAnimator = ValueAnimator.ofInt(0,
-                        GameHelper.transformDpToPx((int) (GameHelper.screenWidth - (GameHelper.screenWidth * 0.2))))
-                        .setDuration(songDuration);
-        trackbarAnimator.setInterpolator(new LinearInterpolator());
-
-        trackbarAnimator.addUpdateListener(animation -> {
-            // Получение текущего значения ширины трекбара
-            int animatedValue = (int) animation.getAnimatedValue();
-
-            // Установка текущих размеров трекбару
-            ViewGroup.LayoutParams params = this.trackbar.getLayoutParams();
-            params.width = animatedValue;
-            this.trackbar.setLayoutParams(params);
-        });
-
-        // Запуск анимации трекбара
-        trackbarAnimator.start();
     }
 
     // Запуск вибрации

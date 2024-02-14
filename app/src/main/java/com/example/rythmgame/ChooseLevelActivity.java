@@ -29,6 +29,7 @@ public class ChooseLevelActivity extends AppCompatActivity {
             // Переходы между активити
             findViewById(R.id.back).setOnClickListener(v -> GameTransitionHelper.startChooseSongActivity(this));
             findViewById(R.id.play).setOnClickListener(v -> GameTransitionHelper.startGameActivity(this));
+            findViewById(R.id.create).setOnClickListener(v -> GameTransitionHelper.startGameCreatorActivity(this));
 
             sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE);
 
