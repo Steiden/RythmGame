@@ -1,5 +1,6 @@
 package com.example.rythmgame;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -25,11 +26,16 @@ public class ChooseSongActivity extends AppCompatActivity {
     public static ArrayList<String> songName;  // Названия песен
     private String selectedSong;   // Выбранная песня
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_choose_song);
+
+            // Переходы между активити
+            findViewById(R.id.back).setOnClickListener(v -> GameTransitionHelper.startMainActivity(this));
+            findViewById(R.id.selectedSongImageButton).setOnClickListener(v -> GameTransitionHelper.startChooseLevelActivity(this));
 
             sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE);
 
@@ -72,15 +78,6 @@ public class ChooseSongActivity extends AppCompatActivity {
 
         // Сохранение выбранном песни
         saveSelectedSong(songName.get(songName.indexOf(selectedSong) - 1));
-    }
-
-    // Переходы между активити
-    public void startActivityMain(View view) {
-        GameTransitionHelper.startMainActivity(this);
-    }
-    public void startActivityChooseLevel(View view) {
-        saveSelectedSong(selectedSong);
-        GameTransitionHelper.startChooseLevelActivity(this);
     }
 
     // Сохранение выбранной песни

@@ -16,13 +16,13 @@
             android:layout_height="40dp">
 
             <ImageButton
+                android:id="@+id/back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:padding="15dp"
                 android:background="@color/transparent"
                 android:src="@drawable/back_arrow"
-                android:onClick="startActivityChooseSong"
                 android:contentDescription="@string/go_to_main_window" />
 
         </RelativeLayout>
@@ -133,11 +133,11 @@
             android:layout_height="150dp">
 
             <Button
+                android:id="@+id/play"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:background="@drawable/button_style"
-                android:onClick="startActivityGame"
                 android:text="@string/play"
                 android:textColor="@color/white"
                 android:textSize="20sp" />

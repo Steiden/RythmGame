@@ -2,6 +2,7 @@ package com.example.rythmgame;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -18,11 +19,16 @@ public class ChooseLevelActivity extends AppCompatActivity {
 
     private Button selectedLevel;   // Выбранный уровень
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_choose_level);
+
+            // Переходы между активити
+            findViewById(R.id.back).setOnClickListener(v -> GameTransitionHelper.startChooseSongActivity(this));
+            findViewById(R.id.play).setOnClickListener(v -> GameTransitionHelper.startGameActivity(this));
 
             sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE);
 
@@ -53,13 +59,5 @@ public class ChooseLevelActivity extends AppCompatActivity {
         selectedLevel = findViewById(view.getId());
         // Установка цвета выбранного уровня выбранному уровню
         view.setBackgroundResource(R.drawable.button_level_selected_style);
-    }
-
-    // Переходы между активити
-    public void startActivityChooseSong(View view) {
-        GameTransitionHelper.startChooseSongActivity(this);
-    }
-    public void startActivityGame(View view) {
-        GameTransitionHelper.startGameActivity(this);
     }
 }

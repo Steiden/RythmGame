@@ -2,6 +2,7 @@ package com.example.rythmgame;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -9,10 +10,16 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Переходы между активити
+        findViewById(R.id.play).setOnClickListener(v -> GameTransitionHelper.startChooseSongActivity(this));
+        findViewById(R.id.settings).setOnClickListener(v -> GameTransitionHelper.startSettingsActivity(this));
+        findViewById(R.id.exit).setOnClickListener(v -> finishAffinity());
 
         // Получение всех звезд на главном экране
         TextView[] stares = new TextView[]{
@@ -29,18 +36,5 @@ public class MainActivity extends AppCompatActivity {
         for (TextView star : stares) {
             star.animate().alpha(1).rotation(360).translationY(1500).setDuration(10000);
         }
-    }
-
-    // Переходы между активити
-    public void startActivityChooseSong(View view) {
-        GameTransitionHelper.startChooseSongActivity(this);
-    }
-    public void startActivitySettings(View view) {
-        GameTransitionHelper.startSettingsActivity(this);
-    }
-
-    // Выход из игры
-    public void ExitActivity(View view) {
-        finishAndRemoveTask();
     }
 }

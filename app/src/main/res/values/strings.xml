@@ -65,4 +65,6 @@
     <string name="exit">Выйти</string>
     <string name="star">*</string>
     <string name="game_title">Какое-то название</string>
+    <string name="_default_score">0</string>
+    <string name="_default_accuracy">100%</string>
 </resources>

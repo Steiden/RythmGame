@@ -33,11 +33,16 @@ public class GameActivity extends AppCompatActivity {
     private TextView timerTextView; // Текст таймера обратного отсчета
 
     GamePlay gamePlay;
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_game);
+
+            // Событие при нажатии на кнопку паузы
+            findViewById(R.id.pauseButton).setOnClickListener(v ->
+                    GameTransitionHelper.startChooseLevelActivity(this));
 
             // Получение данных о смартфоне
             vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
@@ -75,17 +80,6 @@ public class GameActivity extends AppCompatActivity {
         } catch (Exception ex) {
             Log.e("GameActivity", "Error: " + ex.getMessage());
             Toast.makeText(this, "Error: " + ex.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    // Переходы между активити
-    public void startChooseLevelActivity(View view) {
-        try {
-            gamePlay.closeGame();
-            GameTransitionHelper.startChooseLevelActivity(this);
-        }
-        catch (Exception ex) {
-            Log.e("GameActivity", "Error: " + ex.getMessage());
         }
     }
 }
