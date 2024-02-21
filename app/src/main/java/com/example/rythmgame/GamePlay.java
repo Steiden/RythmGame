@@ -17,7 +17,13 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class GamePlay {
@@ -42,7 +48,8 @@ public class GamePlay {
     private final MediaPlayer songMusic;    // Игровая музыка
 
     // Другое
-    private final ArrayList<Float> accuracyList;
+    private final ArrayList<Float> accuracyList;    // Список всех точностей
+    private HashMap<Long, float[]> noteTimingStorage;
 
     // Конструктор класса
     public GamePlay(Context context) {
@@ -56,6 +63,8 @@ public class GamePlay {
         this.score = 0;
         this.accuracy = 100;
         this.accuracyList = new ArrayList<>();
+//        this.loadData();
+//        Log.println(Log.INFO, "Load data (noteTimingStorage)", String.valueOf(noteTimingStorage != null));
     }
 
     // Сеттеры
@@ -217,6 +226,17 @@ public class GamePlay {
     private void startVibration() {
         if(GameActivity.vibrator.hasVibrator()) {
             GameActivity.vibrator.vibrate(100);
+        }
+    }
+
+    // Получение данных о нотах
+    private void loadData() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            try (ObjectInputStream in = new ObjectInputStream(Files.newInputStream(Paths.get("noteTimingStorage.obj")))) {
+                this.noteTimingStorage = (HashMap<Long, float[]>) in.readObject();
+            } catch (IOException | ClassNotFoundException ex) {
+                Log.e("Load data (noteTimingStorage)", ex.getMessage());
+            }
         }
     }
 }

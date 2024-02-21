@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".GameActivity"
+    tools:context=".GameCreatorActivity"
     android:background="@color/blackBackground">
 
     <LinearLayout
@@ -18,7 +18,7 @@
 
             <View
                 android:id="@+id/trackbar"
-                android:layout_width="0dp"
+                android:layout_width="300dp"
                 android:layout_height="2dp"
                 android:layout_centerVertical="true"
                 android:background="@drawable/shape_line" />
@@ -74,24 +74,45 @@
                 android:textStyle="bold"
                 android:translationY="-60dp" />
 
-            <!--            <RelativeLayout-->
-            <!--                android:layout_width="150dp"-->
-            <!--                android:layout_height="150dp">-->
-            <!--                -->
-            <!--                <View-->
-            <!--                    android:layout_width="50dp"-->
-            <!--                    android:layout_height="50dp"-->
-            <!--                    android:layout_centerInParent="true"-->
-            <!--                    android:background="@drawable/shape_oval"/>-->
-            <!--                <View-->
-            <!--                    android:layout_width="150dp"-->
-            <!--                    android:layout_height="150dp"-->
-            <!--                    android:layout_centerInParent="true"-->
-            <!--                    android:background="@drawable/shape_ring"/>-->
-            <!--                -->
-            <!--            </RelativeLayout>-->
+<!--                        <RelativeLayout-->
+<!--                            android:layout_width="150dp"-->
+<!--                            android:layout_height="150dp">-->
+<!--                            -->
+<!--                            <View-->
+<!--                                android:layout_width="50dp"-->
+<!--                                android:layout_height="50dp"-->
+<!--                                android:layout_centerInParent="true"-->
+<!--                                android:background="@drawable/shape_oval"/>-->
+<!--                            <View-->
+<!--                                android:layout_width="150dp"-->
+<!--                                android:layout_height="150dp"-->
+<!--                                android:layout_centerInParent="true"-->
+<!--                                android:background="@drawable/shape_ring"/>-->
+<!--                            -->
+<!--                        </RelativeLayout>-->
 
         </RelativeLayout>
+
+<!--        <Button-->
+<!--            android:id="@+id/writeSong"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="100dp"-->
+<!--            android:text="ЗАПИСАТЬ"-->
+<!--            android:onClick="insertSong"/>-->
+
+<!--        <Button-->
+<!--            android:id="@+id/getSong"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="100dp"-->
+<!--            android:text="ПОЛУЧИТЬ"-->
+<!--            android:onClick="printSongs"/>-->
+
+<!--        <Button-->
+<!--            android:id="@+id/deleteSong"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="100dp"-->
+<!--            android:text="УДАЛИТЬ"-->
+<!--            android:onClick="deleteSong"/>-->
 
     </LinearLayout>
 

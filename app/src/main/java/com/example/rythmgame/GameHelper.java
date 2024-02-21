@@ -51,21 +51,6 @@ public class GameHelper {
         return GamePlay.context.getResources().getDisplayMetrics().heightPixels;
     }
 
-    // Интерфейс принимаемой функции для выполнения какого-либо действия
-    interface ActionFunction {
-        void action(long millisUntilFinished);
-    }
-
-//    public static void startTimer(long duration, long interval, ActionFunction actionOnTick, ActionFunction actionOnFinish) {
-//        new CountDownTimer(3000, 1000) {
-//
-//            public void onTick(long millisUntilFinished) { actionOnTick.action(millisUntilFinished); }
-//            public void onFinish() {
-//                actionOnFinish.action(0);
-//            }
-//        }.start();
-//    }
-
     public static void startTrackbar(View trackbar, int songDuration) {
         // Настройка и запуск анимации трекбара
         ValueAnimator trackbarAnimator = ValueAnimator.ofInt(0,

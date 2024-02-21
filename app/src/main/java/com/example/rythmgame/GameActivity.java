@@ -60,15 +60,12 @@ public class GameActivity extends AppCompatActivity {
             timerTextView = findViewById(R.id.timerTextView);
 
             // Запуск таймера
-            new CountDownTimer(3000, 1000) {
-                public void onTick(long millisUntilFinished) {
-                    timerTextView.setText(String.valueOf(millisUntilFinished / 1000 + 1));
-                }
-                public void onFinish() {
-                    timerTextView.setText("");
-                    startGame();
-                }
-            }.start();
+            GameTimer.start(3000, 1000,
+                    (long millisUntilFinished) -> timerTextView.setText(String.valueOf(millisUntilFinished / 1000 + 1)),
+                    () -> {
+                        timerTextView.setText("");
+                        startGame();
+                    });
 
         } catch (Exception ex) {
             Log.e("GameActivity", "Error: " + ex.getMessage());

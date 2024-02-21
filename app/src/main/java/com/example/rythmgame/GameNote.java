@@ -54,6 +54,9 @@ public class GameNote {
     public Button getNoteButton() { return this.NoteButton; }
     public long getClickTime() { return this.clickTime; }
 
+    // Сеттеры
+    public void setClickTime(long value) { this.clickTime = value; }
+
     // Создание ноты
     public GameNote create() {
         // Параметры контейнера
@@ -105,13 +108,7 @@ public class GameNote {
 
     // Запуск таймера для подсчета очков
     private void startClickTimer() {
-        new CountDownTimer(1250, 50) {
-            public void onTick(long millisUntilFinished) {
-                clickTime = millisUntilFinished;
-            }
-            public void onFinish() {
-                clickTime = 0;
-            }
-        }.start();
+        GameTimer.start(1250, 1,
+                this::setClickTime, () -> setClickTime(0));
     }
 }
