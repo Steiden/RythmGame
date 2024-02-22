@@ -1,13 +1,11 @@
 package com.example.rythmgame;
 
 import android.animation.ValueAnimator;
-import android.annotation.SuppressLint;
-import android.os.CountDownTimer;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
-import android.widget.TextView;
 
 //import net.beadsproject.beads.analysis.BeatDetect;
 //import net.beadsproject.beads.analysis.FeatureExtractor;
@@ -16,6 +14,13 @@ import android.widget.TextView;
 //import net.beadsproject.beads.core.AudioIO;
 //import net.beadsproject.beads.data.audiofile.AudioFileReader;
 
+import com.google.gson.Gson;
+
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.Random;
 
 public class GameHelper {
