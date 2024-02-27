@@ -12,7 +12,7 @@ public class GameTimer {
         void onFinish();
     }
 
-    public static void start(long duration, long interval, OnTickFunction actionOnTick, OnFinishFunction actionOnFinish) {
+    public static CountDownTimer start(long duration, long interval, OnTickFunction actionOnTick, OnFinishFunction actionOnFinish) {
         timer = new CountDownTimer(duration, interval) {
 
             @Override
@@ -27,6 +27,8 @@ public class GameTimer {
         };
 
         timer.start();
+
+        return timer;
     }
 
     public void stop() {

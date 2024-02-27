@@ -41,7 +41,7 @@ public class GameCreator {
         this.selectedSong = selectedSong;
         this.songsList = songsList;
 
-        this.noteTimingsList = this.selectedSong.getNoteTimings();
+        this.noteTimingsList = new ArrayList<>();
 
         noteCount = 0;
         millisToEnd = this.songMusic.getDuration();
@@ -62,6 +62,8 @@ public class GameCreator {
 
                 // Создание нового тайминга для ноты
                 NoteTiming noteTiming = new NoteTiming(coordinates, this.millisToEnd);
+
+                Log.d("Note timing", "x: " + coordinates[0] + " " + "y: " + coordinates[1] + " " + "ms: " + millisToEnd);
 
                 // Добавление тайминга ноты в список
                 noteTimingsList.add(noteTiming);
@@ -104,6 +106,9 @@ public class GameCreator {
         this.selectedSong.setNoteTimings(this.noteTimingsList);
         this.songsList.set(this.selectedSong.getId() - 1, this.selectedSong);
 
+        GameFileHelper.saveSelectedSong(this.context, this.selectedSong);
         GameFileHelper.saveSongsList(this.context, this.songsList);
+
+        Log.d("Save note timings", "Successfully");
     }
 }

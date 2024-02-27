@@ -84,6 +84,6 @@ public class GameHelper {
 
     public static boolean inRange(NoteTiming noteTiming, long millisUntilFinished) {
         long noteTime = noteTiming.getTime();
-        return millisUntilFinished > (noteTime - 20) && millisUntilFinished < (noteTime + 20);
+        return millisUntilFinished > (noteTime - 50) && millisUntilFinished < (noteTime + 50);
     }
 }
