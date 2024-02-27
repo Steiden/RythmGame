@@ -2,38 +2,24 @@ package com.example.rythmgame;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.drm.DrmStore;
 import android.media.MediaPlayer;
-import android.os.CountDownTimer;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.room.Room;
-import androidx.room.RoomDatabase;
-import androidx.sqlite.db.SupportSQLiteDatabase;
-
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.List;
+import java.util.Objects;
 
 public class GameCreator {
 
     // Переменные из активити создания игры
     @SuppressLint("StaticFieldLeak")
-    public static Context context;
+    private final Context context;
     private final RelativeLayout gameContainer;
     private final View trackbar;
     private final TextView noteCountTextView;
@@ -41,18 +27,24 @@ public class GameCreator {
 
     private int noteCount;  // Общее количество созданных нот
     private long millisToEnd;   // Количество оставшихся миллисекунд до окончания создания уровня
-    private final HashMap<Long, float[]> noteTimingStorage;  // Хранилище времени, в которое должна появиться определенная нота
+    private final Song selectedSong;  // Выбранная песня
+    private final List<Song> songsList; // Список песен
+    private final List<NoteTiming> noteTimingsList;   // Список таймингов нот для песни
 
-    public GameCreator(Context context) {
-        GameCreator.context = context;
+    public GameCreator(Context context, Song selectedSong, List<Song> songsList) {
+        this.context = context;
         this.gameContainer = GameCreatorActivity.gameContainer;
         this.trackbar = GameCreatorActivity.trackbar;
         this.noteCountTextView = GameCreatorActivity.noteCount;
         this.songMusic = GameCreatorActivity.songMusic;
 
+        this.selectedSong = selectedSong;
+        this.songsList = songsList;
+
+        this.noteTimingsList = this.selectedSong.getNoteTimings();
+
         noteCount = 0;
         millisToEnd = this.songMusic.getDuration();
-        noteTimingStorage = new HashMap<Long, float[]>();
     }
 
     public void setMillisToEnd(long value) { this.millisToEnd = value; }
@@ -63,13 +55,16 @@ public class GameCreator {
         gameContainer.setOnTouchListener((v, event) -> {
 
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                // Получение и запись позиции нажатия
-                float[] positions = new float[2];
-                positions[0] = event.getX();
-                positions[1] = event.getY();
+                // Получение координат нажатия
+                float[] coordinates = new float[2];
+                coordinates[0] = event.getX();
+                coordinates[1] = event.getY();
 
-                // Запись позиций нажатия
-                noteTimingStorage.put(millisToEnd, positions);
+                // Создание нового тайминга для ноты
+                NoteTiming noteTiming = new NoteTiming(coordinates, this.millisToEnd);
+
+                // Добавление тайминга ноты в список
+                noteTimingsList.add(noteTiming);
 
                 // Инкрементирование количества созданных нот и их вывод
                 noteCount++;
@@ -82,7 +77,8 @@ public class GameCreator {
         });
 
         // Запуск трекбара
-        GameHelper.startTrackbar(this.trackbar, songMusic.getDuration());
+        GameHelper gameHelper = new GameHelper(context);
+        gameHelper.startTrackbar(this.trackbar, songMusic.getDuration());
 
         // Запуск музыки
         songMusic.setOnCompletionListener(l -> closeCreatingGame());
@@ -105,9 +101,9 @@ public class GameCreator {
     }
 
     private void saveData() {
+        this.selectedSong.setNoteTimings(this.noteTimingsList);
+        this.songsList.set(this.selectedSong.getId() - 1, this.selectedSong);
 
-    }
-
-    private void addSongInBackground(Song song) {
+        GameFileHelper.saveSongsList(this.context, this.songsList);
     }
 }

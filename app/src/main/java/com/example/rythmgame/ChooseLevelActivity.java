@@ -9,15 +9,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class ChooseLevelActivity extends AppCompatActivity {
 
-    SharedPreferences sharedPreferences;
-
-    // Переменные для работы приложения
-
-    private Button selectedLevel;   // Выбранный уровень
+    private Button selectedLevel;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -31,14 +28,14 @@ public class ChooseLevelActivity extends AppCompatActivity {
             findViewById(R.id.play).setOnClickListener(v -> GameTransitionHelper.startGameActivity(this));
             findViewById(R.id.create).setOnClickListener(v -> GameTransitionHelper.startGameCreatorActivity(this));
 
-            sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE);
+            // Получение выбранной песни
+            Song selectedSong = GameFileHelper.getSelectedSong(this);
 
-            // Получение компонентов activity
-            ImageButton LevelImageButton = findViewById(R.id.LevelImageButton);
-
-            // Установка обложки выбранной песни
-            String selectedSong = sharedPreferences.getString("selectedSong", ChooseSongActivity.songName.get(0));
-            LevelImageButton.setImageResource(ChooseSongActivity.songs.get(selectedSong));
+            // Установка названия, автора и обложки песни
+            assert selectedSong != null;
+            ((TextView) findViewById(R.id.songName)).setText(selectedSong.getName());
+            ((TextView) findViewById(R.id.songAuthor)).setText(selectedSong.getAuthor());
+            ((ImageButton) findViewById(R.id.levelImageButton)).setImageResource(selectedSong.getImage());
 
             // Первый уровень выбран по умолчанию
             selectedLevel = findViewById(R.id.level1);

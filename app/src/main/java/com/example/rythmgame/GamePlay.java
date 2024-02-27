@@ -2,28 +2,18 @@ package com.example.rythmgame;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.media.MediaPlayer;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class GamePlay {
@@ -40,7 +30,7 @@ public class GamePlay {
 
     // Переменные для работы в активити
     @SuppressLint("StaticFieldLeak")
-    public static Context context;  // Контекст активити игры
+    public Context context;  // Контекст активити игры
     private final RelativeLayout NoteContainerParent;   // Контейнер для размещения нот
     private final TextView scoreTextView;   // TextView для счета
     private final TextView accuracyTextView;    // TextView для точности
@@ -49,11 +39,15 @@ public class GamePlay {
 
     // Другое
     private final ArrayList<Float> accuracyList;    // Список всех точностей
-    private HashMap<Long, float[]> noteTimingStorage;
+    private final Song selectedSong;  // Выбранная песня
+    private final List<NoteTiming> selectedSongNoteTimings; // Тайминги нот для выбранной песни
+    private final List<Song> songsList; // Список песен
+    private final int selectedSongIndex;    // Индекс выбранной песни в списке
+    private int currentNoteIndex = 0;    // Текущая нота
 
     // Конструктор класса
-    public GamePlay(Context context) {
-        GamePlay.context = context;
+    public GamePlay(Context context, Song selectedSong, List<Song> songsList) {
+        this.context = context;
         this.NoteContainerParent = GameActivity.gameContainer;
         this.scoreTextView = GameActivity.scoreTextView;
         this.accuracyTextView = GameActivity.accuracyTextView;
@@ -63,8 +57,11 @@ public class GamePlay {
         this.score = 0;
         this.accuracy = 100;
         this.accuracyList = new ArrayList<>();
-//        this.loadData();
-//        Log.println(Log.INFO, "Load data (noteTimingStorage)", String.valueOf(noteTimingStorage != null));
+
+        this.selectedSong = selectedSong;
+        this.selectedSongNoteTimings = selectedSong.getNoteTimings();
+        this.songsList = songsList;
+        this.selectedSongIndex = songsList.indexOf(selectedSong);
     }
 
     // Сеттеры
@@ -89,16 +86,21 @@ public class GamePlay {
     // Начало игры
     public void startGame() {
         // Запуск трекбара
-        GameHelper.startTrackbar(this.trackbar, songMusic.getDuration());
-
-        // При окончании музыки, уровень закрывается
-        songMusic.setOnCompletionListener(mp -> closeGame());
+        GameHelper gameHelper = new GameHelper(this.context);
+        gameHelper.startTrackbar(this.trackbar, songMusic.getDuration());
 
         // Запуск музыки
         songMusic.start();
 
-        // Создание и размещение ноты
-        createAndPlaceNote();
+        // Запуск игрового таймера
+        GameTimer.start(songMusic.getDuration(), 1,
+                (long millisUntilFinished) -> {
+                    NoteTiming noteTiming = this.selectedSongNoteTimings.get(this.currentNoteIndex);
+                    if(GameHelper.inRange(noteTiming, millisUntilFinished)) {
+                        createAndPlaceNote();
+                        this.currentNoteIndex++;
+                    }
+                }, this::closeGame);
     }
 
     // Закрытие игры
@@ -129,19 +131,12 @@ public class GamePlay {
         addActionsOnClickNote();
 
         // Создание и размещение текущей ноты
-        this.actualGameNote.create().place();
+        float[] coordinates = selectedSongNoteTimings.get(this.currentNoteIndex).getCoordinates();
+
+        this.actualGameNote.create().place(coordinates[0], coordinates[1]);
 
         // Запуск анимации сужения кольца ноты
         startRingAnimation();
-    }
-
-    // Удаление предыдущей ноты, создание и размещение новой ноты
-    public void deleteNoteAndCreateAndPlaceNew() {
-        // Удаление текущей ноты
-        this.actualGameNote.delete();
-
-        // Создание и размещение ноты
-        createAndPlaceNote();
     }
 
     // Создание анимации сужения кольца ноты
@@ -168,8 +163,8 @@ public class GamePlay {
                 scoreTextView.setText("" + score);
                 accuracyTextView.setText(accuracy + "%");
 
-                // Удаление текущей ноты и размещение новой
-                deleteNoteAndCreateAndPlaceNew();
+//                // Удаление текущей ноты и размещение новой
+//                deleteNoteAndCreateAndPlaceNew();
             }
 
             public void onAnimationCancel(@NonNull Animator animation) {
@@ -224,19 +219,8 @@ public class GamePlay {
 
     // Запуск вибрации
     private void startVibration() {
-        if(GameActivity.vibrator.hasVibrator()) {
+        if (GameActivity.vibrator.hasVibrator()) {
             GameActivity.vibrator.vibrate(100);
-        }
-    }
-
-    // Получение данных о нотах
-    private void loadData() {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            try (ObjectInputStream in = new ObjectInputStream(Files.newInputStream(Paths.get("noteTimingStorage.obj")))) {
-                this.noteTimingStorage = (HashMap<Long, float[]>) in.readObject();
-            } catch (IOException | ClassNotFoundException ex) {
-                Log.e("Load data (noteTimingStorage)", ex.getMessage());
-            }
         }
     }
 }

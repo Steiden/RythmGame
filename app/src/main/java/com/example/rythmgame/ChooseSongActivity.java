@@ -5,26 +5,25 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class ChooseSongActivity extends AppCompatActivity {
 
-    SharedPreferences sharedPreferences;
-
-    // Компоненты activity
-    private ImageButton SelectedSongImageButton;
-
     // Переменные для работы приложения
-    public static HashMap<String, Integer> songs; // Песни и их обложка
-    public static ArrayList<String> songName;  // Названия песен
-    private String selectedSong;   // Выбранная песня
+    private List<Song> songsList;  // Список песен
+    private Song selectedSong;   // Выбранная песня
+    private GameFile<Song> gameFileOfSelectedSong;  // Управление игровыми файлами
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -37,66 +36,59 @@ public class ChooseSongActivity extends AppCompatActivity {
             findViewById(R.id.back).setOnClickListener(v -> GameTransitionHelper.startMainActivity(this));
             findViewById(R.id.selectedSongImageButton).setOnClickListener(v -> GameTransitionHelper.startChooseLevelActivity(this));
 
-            sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE);
+            // Получение списка песен
+            this.songsList = GameFileHelper.getSongsList(this);
 
-            // Получение компонентов activity
-            SelectedSongImageButton = findViewById(R.id.selectedSongImageButton);
+            if (songsList == null) {
+                this.songsList = new ArrayList<>();
+                songsList.add(new Song(1, "Believer", "Imagine Dragons",
+                        R.drawable.believer_imagine_dragons, R.raw.believer));
+                songsList.add(new Song(2, "Natural", "Imagine Dragons",
+                        R.drawable.natural_imagine_dragons, R.raw.natural));
+            }
 
-            // Массив с названиями песен
-            songName = new ArrayList<>();
-            songName.add("believer");
-            songName.add("natural");
+            GameFileHelper.saveSongsList(this, songsList);
 
-            // Заполнение списка песен
-            songs = new HashMap<>();
-            songs.put(songName.get(0), R.drawable.believer_imagine_dragons);
-            songs.put(songName.get(1), R.drawable.natural_imagine_dragons);
-
-            // Установка последнего выбранного уровня
-            selectedSong = sharedPreferences.getString("selectedSong", songName.get(0));
-            SelectedSongImageButton.setImageResource(songs.get(selectedSong));
-        }
-        catch (Exception ex) {
-            System.out.println(ex.getMessage());
-            Toast.makeText(this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+            // Установка выбранного уровня в качестве первого
+            saveSelectedSong(songsList.get(0));
+        } catch (Exception ex) {
+            Log.e("ChooseSongActivity Error", ex.getMessage());
         }
     }
 
     // Переключение на следующую песню
     public void setNextSong(View view) {
         // Ничего не делать, если достигнута последняя песня
-        if (songName.indexOf(selectedSong) + 1 >= songName.size()) return;
+        if (this.songsList.indexOf(this.selectedSong) + 1 >= this.songsList.size()) return;
 
         // Сохранение выбранной песни
-        saveSelectedSong(songName.get(songName.indexOf(selectedSong) + 1));
+        saveSelectedSong(this.songsList.get(this.songsList.indexOf(this.selectedSong) + 1));
     }
 
     // Переключение на предыдущую песню
     public void setPrevSong(View view) {
         // Ничего не делать, если достигнута первая песня
-        if (songName.indexOf(selectedSong) - 1 < 0) return;
+        if (this.songsList.indexOf(this.selectedSong) - 1 < 0) return;
 
         // Сохранение выбранном песни
-        saveSelectedSong(songName.get(songName.indexOf(selectedSong) - 1));
+        saveSelectedSong(this.songsList.get(this.songsList.indexOf(this.selectedSong) - 1));
     }
 
     // Сохранение выбранной песни
-    private void saveSelectedSong(String song) {
+    private void saveSelectedSong(Song song) {
         try {
-            selectedSong = song;
+            // Установка выбранной песни
+            this.selectedSong = song;
 
-            // Сохранение выбранной песни
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString("selectedSong", selectedSong);
-            editor.apply();
+            // Сохранение выбранной песни в файл
+            GameFileHelper.saveSelectedSong(this, this.selectedSong);
 
-            // Установка изображения для выбранной песни
-            SelectedSongImageButton.setImageResource(songs.get(selectedSong));
-        }
-        catch (Exception ex) {
-            System.out.println(ex.getMessage());
-            Toast.makeText(this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+            // Установка названия, автора и обложки песни
+            ((TextView) findViewById(R.id.songName)).setText(this.selectedSong.getName());
+            ((TextView) findViewById(R.id.songAuthor)).setText(this.selectedSong.getAuthor());
+            ((ImageButton) findViewById(R.id.selectedSongImageButton)).setImageResource(this.selectedSong.getImage());
+        } catch (Exception ex) {
+            Log.e("Save selected song", ex.getMessage());
         }
     }
-
 }

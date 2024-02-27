@@ -39,6 +39,7 @@
                 tools:ignore="UselessParent">
 
                 <TextView
+                    android:id="@+id/songName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/song_name"
@@ -48,6 +49,7 @@
                     android:textAlignment="center"/>
 
                 <TextView
+                    android:id="@+id/songAuthor"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/author"
@@ -64,13 +66,12 @@
             android:layout_height="250dp">
 
             <ImageButton
-                android:id="@+id/LevelImageButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/levelImageButton"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
                 android:layout_centerInParent="true"
                 android:background="@drawable/song_style"
-                android:contentDescription="@string/song_now"
-                android:src="@drawable/believer_imagine_dragons" />
+                android:contentDescription="@string/song_now" />
 
         </RelativeLayout>
 

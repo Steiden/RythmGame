@@ -18,7 +18,7 @@
 
             <View
                 android:id="@+id/trackbar"
-                android:layout_width="300dp"
+                android:layout_width="0dp"
                 android:layout_height="2dp"
                 android:layout_centerVertical="true"
                 android:background="@drawable/shape_line" />

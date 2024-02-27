@@ -7,12 +7,15 @@ import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -30,6 +33,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class GameCreatorActivity extends AppCompatActivity {
+    SharedPreferences sharedPreferences;
 
     @SuppressLint("StaticFieldLeak")
     public static RelativeLayout gameContainer;
@@ -39,10 +43,8 @@ public class GameCreatorActivity extends AppCompatActivity {
     public static TextView noteCount;
     public static MediaPlayer songMusic;
 
-    private GamePlay gamePlay;
     private GameCreator gameCreator;
-
-    private File songsListFile;
+    private Song selectedSong;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -63,33 +65,19 @@ public class GameCreatorActivity extends AppCompatActivity {
             // Получение TextView количества созданных нот
             noteCount = findViewById(R.id.noteCount);
             // Получение текущей музыки
-            songMusic = MediaPlayer.create(this, R.raw.komarovo);
+//            songMusic = MediaPlayer.create(this, R.raw.komarovo);
             // Получение timerTextView
             TextView timerTextView = findViewById(R.id.timerTextView);
 
             // _________________________________________________
 
-            Song song = new Song("Believer");
 
-            Gson gson = new Gson();
-            String json = gson.toJson(song);
+            // Получение выбранной песни
+            this.selectedSong = GameFileHelper.getSelectedSong(this);
 
-            songsListFile = new File(getExternalFilesDir(null), "songsList.json");
-            if(!songsListFile.exists()) {
-                if(!songsListFile.createNewFile()) {
-                    Log.e("Creating new songs list file", "File doesn't create");
-                }
-                else {
-                    Log.println(Log.INFO, "Creating songs list file", "File was create");
-                }
-            }
-
-            try (FileWriter writer = new FileWriter(songsListFile)) {
-                writer.write(json);
-                Log.println(Log.INFO, "Write data into songs list file", "Data saved");
-            } catch (Exception e) {
-                Log.e("Save test data", e.getMessage());
-            }
+            // Установка музыки для песни
+            assert this.selectedSong != null;
+            songMusic = MediaPlayer.create(this, this.selectedSong.getSong());
 
             // Запуск таймера
             GameTimer.start(3000, 1000,
@@ -104,17 +92,18 @@ public class GameCreatorActivity extends AppCompatActivity {
     }
 
     private void startCreateGame() {
-        gamePlay = new GamePlay(this);
-        gameCreator = new GameCreator(this);
+        List<Song> songsList = GameFileHelper.getSongsList(this);
+
+        gameCreator = new GameCreator(this, this.selectedSong, songsList);
         gameCreator.startCreatingGame();
+    }
 
-        Gson gson = new Gson();
-
-        try (FileReader reader = new FileReader(songsListFile)) {
-            Song song = gson.fromJson(reader, Song.class);
-            Toast.makeText(this, song.getName(), Toast.LENGTH_SHORT).show();
-        } catch (Exception ex) {
-            Log.e("Load text data", ex.getMessage());
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK) {
+            gameCreator.closeCreatingGame();
+            return true;
         }
+        return super.onKeyDown(keyCode, event);
     }
 }

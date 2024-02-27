@@ -1,8 +1,10 @@
 package com.example.rythmgame;
 
 import android.animation.ValueAnimator;
+import android.content.Context;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
@@ -25,10 +27,13 @@ import java.util.Random;
 
 public class GameHelper {
 
-    // Статичные переменные
-    public static final DisplayMetrics displayMetrics = GamePlay.context.getResources().getDisplayMetrics();
-    public static final int screenWidth = transformPxToDp(getScreenWidth());
-    public static final int screenHeight = transformPxToDp(getScreenHeight());
+    private Context context;
+    private DisplayMetrics displayMetrics;
+
+    public GameHelper(Context context) {
+        this.context = context;
+        this.displayMetrics = this.context.getResources().getDisplayMetrics();
+    }
 
     // Получение случайной позиции
     public static int getRandomPos(int min, int max) {
@@ -37,29 +42,29 @@ public class GameHelper {
     }
 
     // Преобразование из px в dp
-    public static int transformPxToDp(int px) {
+    public int transformPxToDp(int px) {
         return px / (displayMetrics.densityDpi / 160);
     }
 
     // Преобразование из dp в px
-    public static int transformDpToPx(int dp) {
+    public int transformDpToPx(int dp) {
         return dp * displayMetrics.densityDpi / 160;
     }
 
     // Получение ширины экрана устройства
-    private static int getScreenWidth() {
-        return GamePlay.context.getResources().getDisplayMetrics().widthPixels;
+    public int getScreenWidth() {
+        return transformPxToDp(this.context.getResources().getDisplayMetrics().widthPixels);
     }
 
     // Получение высоты экрана устройства
-    private static int getScreenHeight() {
-        return GamePlay.context.getResources().getDisplayMetrics().heightPixels;
+    public int getScreenHeight() {
+        return transformPxToDp(this.context.getResources().getDisplayMetrics().heightPixels);
     }
 
-    public static void startTrackbar(View trackbar, int songDuration) {
+    public void startTrackbar(View trackbar, int songDuration) {
         // Настройка и запуск анимации трекбара
         ValueAnimator trackbarAnimator = ValueAnimator.ofInt(0,
-                        GameHelper.transformDpToPx((int) (GameHelper.screenWidth - (GameHelper.screenWidth * 0.2))))
+                        transformDpToPx((int) (getScreenWidth() - (getScreenWidth() * 0.2))))
                 .setDuration(songDuration);
         trackbarAnimator.setInterpolator(new LinearInterpolator());
 
@@ -75,5 +80,10 @@ public class GameHelper {
 
         // Запуск анимации трекбара
         trackbarAnimator.start();
+    }
+
+    public static boolean inRange(NoteTiming noteTiming, long millisUntilFinished) {
+        long noteTime = noteTiming.getTime();
+        return millisUntilFinished > (noteTime - 20) && millisUntilFinished < (noteTime + 20);
     }
 }

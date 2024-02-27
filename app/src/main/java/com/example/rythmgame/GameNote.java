@@ -11,8 +11,8 @@ import android.widget.Toast;
 public class GameNote {
 
     // Константы
-    private final int MAX_SCALE = GameHelper.transformDpToPx(GameHelper.screenWidth / 3); // Максимальный размер ноты
-    private final int MIN_SCALE = GameHelper.transformDpToPx(GameHelper.screenWidth / 9);  // Минимальный размер ноты
+    private int MAX_SCALE; // Максимальный размер ноты
+    private int MIN_SCALE;  // Минимальный размер ноты
 
     private final int MIN_POSITION_X;   // Минимальное значение расположения по оси X
     private final int MIN_POSITION_Y;   // Минимальное значение расположения по оси Y
@@ -41,6 +41,10 @@ public class GameNote {
         // Получение ширины и высоты родительского контейнера ноты
         int noteContainerParentWidth = this.NoteContainerParent.getWidth();
         int noteContainerParentHeight = this.NoteContainerParent.getHeight();
+
+        GameHelper gameHelper = new GameHelper(context);
+        this.MAX_SCALE = gameHelper.transformDpToPx(gameHelper.getScreenWidth() / 3);
+        this.MIN_SCALE = gameHelper.transformDpToPx(gameHelper.getScreenWidth() / 9);
 
         // Установка макс и мин значения для расположения ноты по осям X и Y
         this.MIN_POSITION_X = (int) (0 + (noteContainerParentWidth * 0.2));
@@ -89,10 +93,10 @@ public class GameNote {
     }
 
     // Размещение ноты
-    public void place() {
+    public void place(float x, float y) {
         // Установка смещения контейнера ноты в родителе
-        NoteContainer.setTranslationX(GameHelper.getRandomPos(MIN_POSITION_X, MAX_POSITION_X));
-        NoteContainer.setTranslationY(GameHelper.getRandomPos(MIN_POSITION_Y, MAX_POSITION_Y));
+        this.NoteContainer.setTranslationX(x);
+        this.NoteContainer.setTranslationY(y);
 
         // Добавление контейнера ноты в родительский Layout
         NoteContainerParent.addView(this.NoteContainer);
