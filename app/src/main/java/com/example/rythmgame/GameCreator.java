@@ -72,6 +72,12 @@ public class GameCreator {
                 noteCount++;
                 noteCountTextView.setText("notes: " + noteCount);
 
+                // Создание вспышки после нажатия
+                new FlashElement(this.context, gameContainer)
+                        .create()
+                        .place(coordinates[0], coordinates[1]);
+
+
                 return true;
             }
 
