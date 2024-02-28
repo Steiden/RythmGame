@@ -48,8 +48,7 @@
 
             <ImageButton
                 android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginStart="10dp"
+                android:layout_height="match_parent"
                 android:layout_centerVertical="true"
                 android:scaleType="fitCenter"
                 android:background="@color/transparent"
@@ -57,20 +56,30 @@
                 android:contentDescription="@string/prev_song"
                 android:onClick="setPrevSong"/>
 
-            <ImageButton
-                android:id="@+id/selectedSongImageButton"
+            <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:background="@drawable/song_style"
-                android:contentDescription="@string/song_now"
-                android:src="@drawable/believer_imagine_dragons" />
+                android:layout_centerInParent="true">
+
+                <View
+                    android:layout_width="300dp"
+                    android:layout_height="300dp"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/layout_border_style" />
+
+                <ImageButton
+                    android:id="@+id/selectedSongImageButton"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/song_style"
+                    android:contentDescription="@string/song_now" />
+
+            </RelativeLayout>
 
             <ImageButton
                 android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
+                android:layout_height="match_parent"
                 android:layout_centerVertical="true"
                 android:layout_alignParentEnd="true"
                 android:scaleType="fitCenter"

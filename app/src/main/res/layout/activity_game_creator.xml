@@ -93,27 +93,6 @@
 
         </RelativeLayout>
 
-<!--        <Button-->
-<!--            android:id="@+id/writeSong"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="100dp"-->
-<!--            android:text="ЗАПИСАТЬ"-->
-<!--            android:onClick="insertSong"/>-->
-
-<!--        <Button-->
-<!--            android:id="@+id/getSong"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="100dp"-->
-<!--            android:text="ПОЛУЧИТЬ"-->
-<!--            android:onClick="printSongs"/>-->
-
-<!--        <Button-->
-<!--            android:id="@+id/deleteSong"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="100dp"-->
-<!--            android:text="УДАЛИТЬ"-->
-<!--            android:onClick="deleteSong"/>-->
-
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
