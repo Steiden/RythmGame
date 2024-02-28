@@ -27,8 +27,8 @@ import java.util.Random;
 
 public class GameHelper {
 
-    private Context context;
-    private DisplayMetrics displayMetrics;
+    private final Context context;
+    private final DisplayMetrics displayMetrics;
 
     public GameHelper(Context context) {
         this.context = context;

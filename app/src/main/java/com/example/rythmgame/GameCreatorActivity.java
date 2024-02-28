@@ -33,8 +33,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class GameCreatorActivity extends AppCompatActivity {
-    SharedPreferences sharedPreferences;
-
     @SuppressLint("StaticFieldLeak")
     public static RelativeLayout gameContainer;
     @SuppressLint("StaticFieldLeak")
@@ -64,8 +62,6 @@ public class GameCreatorActivity extends AppCompatActivity {
             trackbar = findViewById(R.id.trackbar);
             // Получение TextView количества созданных нот
             noteCount = findViewById(R.id.noteCount);
-            // Получение текущей музыки
-//            songMusic = MediaPlayer.create(this, R.raw.komarovo);
             // Получение timerTextView
             TextView timerTextView = findViewById(R.id.timerTextView);
 
