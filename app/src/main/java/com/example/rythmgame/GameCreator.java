@@ -9,11 +9,8 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 
 public class GameCreator {
 
@@ -51,70 +48,81 @@ public class GameCreator {
 
     @SuppressLint({"SetTextI18n", "ClickableViewAccessibility"})
     public void startCreatingGame() {
-        // При клике на контейнер нот, сохранять время и положение нажатия
-        gameContainer.setOnTouchListener((v, event) -> {
+        try {
+            // При клике на контейнер нот, сохранять время и положение нажатия
+            gameContainer.setOnTouchListener((v, event) -> {
 
-            if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                // Получение координат нажатия
-                float[] coordinates = new float[2];
-                coordinates[0] = event.getX();
-                coordinates[1] = event.getY();
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    // Получение координат нажатия
+                    float[] coordinates = new float[2];
+                    coordinates[0] = event.getX();
+                    coordinates[1] = event.getY();
 
-                // Создание нового тайминга для ноты
-                NoteTiming noteTiming = new NoteTiming(coordinates, this.millisToEnd);
+                    // Создание нового тайминга для ноты
+                    NoteTiming noteTiming = new NoteTiming(coordinates, this.millisToEnd);
 
-                Log.d("Note timing", "x: " + coordinates[0] + " " + "y: " + coordinates[1] + " " + "ms: " + millisToEnd);
+                    Log.d("Note timing", "x: " + coordinates[0] + ", " + "y: " + coordinates[1] + ", " + "ms: " + millisToEnd);
 
-                // Добавление тайминга ноты в список
-                noteTimingsList.add(noteTiming);
+                    // Добавление тайминга ноты в список
+                    noteTimingsList.add(noteTiming);
 
-                // Инкрементирование количества созданных нот и их вывод
-                noteCount++;
-                noteCountTextView.setText("notes: " + noteCount);
+                    // Инкрементирование количества созданных нот и их вывод
+                    noteCount++;
+                    noteCountTextView.setText("notes: " + noteCount);
 
-                // Создание вспышки после нажатия
-                new FlashElement(this.context, gameContainer)
-                        .create()
-                        .place(coordinates[0], coordinates[1]);
+                    // Создание вспышки после нажатия
+                    new FlashElement(this.context, gameContainer)
+                            .create()
+                            .place(coordinates[0] - 90, coordinates[1] - 90);
 
+                    return true;
+                }
 
-                return true;
-            }
+                return false;
+            });
 
-            return false;
-        });
+            // Запуск трекбара
+            GameHelper gameHelper = new GameHelper(context);
+            gameHelper.startTrackbar(this.trackbar, songMusic.getDuration());
 
-        // Запуск трекбара
-        GameHelper gameHelper = new GameHelper(context);
-        gameHelper.startTrackbar(this.trackbar, songMusic.getDuration());
+            // Запуск музыки
+            songMusic.setOnCompletionListener(l -> closeCreatingGame());
+            songMusic.start();
 
-        // Запуск музыки
-        songMusic.setOnCompletionListener(l -> closeCreatingGame());
-        songMusic.start();
-
-        // Запуск таймера
-        GameTimer.start(this.songMusic.getDuration(), 1,
-                this::setMillisToEnd, this::saveData);
+            // Запуск таймера
+            GameTimer.start(this.songMusic.getDuration(), 1,
+                    this::setMillisToEnd, this::saveData);
+        } catch (Exception ex) {
+            Log.e("Starting of creating game", ex.getMessage());
+        }
     }
 
     public void closeCreatingGame() {
-        // Завершение музыки
-        songMusic.release();
+        try {
+            // Завершение музыки
+            songMusic.release();
 
-        // Сохранение данных
-        saveData();
+            // Сохранение данных
+            saveData();
 
-        // Переход на следующую активити
-        GameTransitionHelper.startChooseLevelActivity(context);
+            // Переход на следующую активити
+            GameTransitionHelper.startChooseLevelActivity(context);
+        } catch (Exception ex) {
+            Log.e("Closing of creating game", ex.getMessage());
+        }
     }
 
     private void saveData() {
-        this.selectedSong.setNoteTimings(this.noteTimingsList);
-        this.songsList.set(this.selectedSong.getId() - 1, this.selectedSong);
+        try {
+            this.selectedSong.setNoteTimings(this.noteTimingsList);
+            this.songsList.set(this.selectedSong.getId() - 1, this.selectedSong);
 
-        GameFileHelper.saveSelectedSong(this.context, this.selectedSong);
-        GameFileHelper.saveSongsList(this.context, this.songsList);
+            GameFileHelper.saveSelectedSong(this.context, this.selectedSong);
+            GameFileHelper.saveSongsList(this.context, this.songsList);
 
-        Log.d("Save note timings", "Successfully");
+            Log.d("Save note timings", "Successfully");
+        } catch (Exception ex) {
+            Log.e("Saving data", ex.getMessage());
+        }
     }
 }

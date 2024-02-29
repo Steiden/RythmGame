@@ -3,26 +3,10 @@ package com.example.rythmgame;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 
-//import net.beadsproject.beads.analysis.BeatDetect;
-//import net.beadsproject.beads.analysis.FeatureExtractor;
-//import net.beadsproject.beads.analysis.WaveformAnalyzer;
-//import net.beadsproject.beads.core.AudioContext;
-//import net.beadsproject.beads.core.AudioIO;
-//import net.beadsproject.beads.data.audiofile.AudioFileReader;
-
-import com.google.gson.Gson;
-
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.Random;
 
 public class GameHelper {
@@ -61,6 +45,7 @@ public class GameHelper {
         return transformPxToDp(this.context.getResources().getDisplayMetrics().heightPixels);
     }
 
+    // Запуск трекбара
     public void startTrackbar(View trackbar, int songDuration) {
         // Настройка и запуск анимации трекбара
         ValueAnimator trackbarAnimator = ValueAnimator.ofInt(0,
@@ -82,8 +67,7 @@ public class GameHelper {
         trackbarAnimator.start();
     }
 
-    public static boolean inRange(NoteTiming noteTiming, long millisUntilFinished) {
-        long noteTime = noteTiming.getTime();
-        return millisUntilFinished > (noteTime - 50) && millisUntilFinished < (noteTime + 50);
+    public static boolean TimeInRange(long time, long millisUntilFinished) {
+        return millisUntilFinished > (time - 100) && millisUntilFinished < (time + 100);
     }
 }

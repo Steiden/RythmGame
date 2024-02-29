@@ -18,7 +18,8 @@ public class FlashElement {
    public FlashElement create() {
       this.flash = new View(this.context);
 
-      RelativeLayout.LayoutParams flashParams = new RelativeLayout.LayoutParams(100, 100);
+      GameHelper gameHelper = new GameHelper(this.context);
+      RelativeLayout.LayoutParams flashParams = new RelativeLayout.LayoutParams(150, 150);
 
       this.flash.setLayoutParams(flashParams);
       this.flash.setBackgroundResource(R.drawable.flash_style);
@@ -32,7 +33,12 @@ public class FlashElement {
 
       this.contaner.addView(this.flash);
 
-      GameTimer.start(3000, 1000, (long m) -> {}, () -> this.contaner.removeView(this.flash));
+      GameTimer.start(1000, 1,
+              (long m) -> {
+                  this.flash.setScaleX(this.flash.getScaleX() - 0.02f);
+                  this.flash.setScaleY(this.flash.getScaleY() - 0.02f);
+              },
+            () -> this.contaner.removeView(this.flash));
 
       return this;
    }

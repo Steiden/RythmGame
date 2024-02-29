@@ -1,18 +1,13 @@
 package com.example.rythmgame;
 
-import android.animation.Animator;
-import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.LinearInterpolator;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,65 +64,82 @@ public class GamePlay {
 
     @SuppressLint("SetTextI18n")
     public static void setAccuracy(float value) {
-        accuracyList.add(value);
+        try {
+            accuracyList.add(value);
 
-        // Подсчет общей суммы точности
-        float accuracySum = 0;
-        for (float el : accuracyList) {
-            accuracySum += el;
+            // Подсчет общей суммы точности
+            float accuracySum = 0;
+            for (float el : accuracyList) {
+                accuracySum += el;
+            }
+
+            accuracy = (float) Math.round((accuracySum / accuracyList.size()) * 100) / 100;
+
+            accuracyTextView.setText(accuracy + "%");
+        } catch (Exception ex) {
+            Log.e("Setting accuracy", ex.getMessage());
         }
-
-        accuracy = (float) Math.round((accuracySum / accuracyList.size()) * 100) / 100;
-
-        accuracyTextView.setText(accuracy + "%");
     }
 
 
     // Начало игры
     public void startGame() {
-        // Запуск трекбара
-        GameHelper gameHelper = new GameHelper(context);
-        gameHelper.startTrackbar(this.trackbar, songMusic.getDuration());
+        try {
+            // Запуск трекбара
+            GameHelper gameHelper = new GameHelper(context);
+            gameHelper.startTrackbar(this.trackbar, songMusic.getDuration());
 
-        // Запуск музыки
-        songMusic.start();
+            // Запуск музыки
+            songMusic.start();
 
-        // Запуск игрового таймера
-        gameTimer = GameTimer.start(songMusic.getDuration(), 1,
-                (long millisUntilFinished) -> {
-                    NoteTiming noteTiming = this.selectedSongNoteTimings.get(this.currentNoteIndex);
-                    if(GameHelper.inRange(noteTiming, millisUntilFinished)) {
-                        createAndPlaceNote();
-                        this.currentNoteIndex++;
+            // Запуск игрового таймера
+            gameTimer = GameTimer.start(songMusic.getDuration(), 1,
+                    (long millisUntilFinished) -> {
+                        NoteTiming noteTiming = this.selectedSongNoteTimings.get(this.currentNoteIndex);
+                        if (GameHelper.TimeInRange(noteTiming.getTime(), millisUntilFinished)) {
+                            createAndPlaceNote();
+                            this.currentNoteIndex++;
 
-                        if(this.currentNoteIndex >= this.selectedSongNoteTimings.size()) gameTimer.cancel();
-                    }
-                }, this::closeGame);
+                            if (this.currentNoteIndex >= this.selectedSongNoteTimings.size())
+                                gameTimer.cancel();
+                        }
+                    }, this::closeGame);
+        } catch (Exception ex) {
+            Log.e("Starting game", ex.getMessage());
+        }
     }
 
 
     // Закрытие игры
     public void closeGame() {
-        // Завершение музыки
-        songMusic.release();
+        try {
+            // Завершение музыки
+            songMusic.release();
 
-        // Закрытие игрового таймера
-        gameTimer.cancel();
+            // Закрытие игрового таймера
+            gameTimer.cancel();
 
-        // Переход на следующую активити
-        GameTransitionHelper.startChooseLevelActivity(context);
+            // Переход на следующую активити
+            GameTransitionHelper.startChooseLevelActivity(context);
+        } catch (Exception ex) {
+            Log.e("Closing game", ex.getMessage());
+        }
     }
 
 
     // Создание и размещение ноты
     public void createAndPlaceNote() {
-        // Получение координат для размещения ноты
-        float[] coordinates = selectedSongNoteTimings.get(this.currentNoteIndex).getCoordinates();
+        try {
+            // Получение координат для размещения ноты
+            float[] coordinates = selectedSongNoteTimings.get(this.currentNoteIndex).getCoordinates();
 
-        new GameNote(context, this.NoteContainerParent)
-                .create()
-                .place(coordinates[0], coordinates[1]);
+            new GameNote(context, this.NoteContainerParent)
+                    .create()
+                    .place(coordinates[0] - 90, coordinates[1] + 90);
 
-        Log.d("Creating and placing note", "Successfully");
+            Log.d("Creating and placing note", "Successfully");
+        } catch (Exception ex) {
+            Log.e("Creating and placing note", ex.getMessage());
+        }
     }
 }
