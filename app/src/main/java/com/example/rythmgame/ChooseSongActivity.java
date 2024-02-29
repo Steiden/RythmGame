@@ -1,19 +1,14 @@
 package com.example.rythmgame;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -39,14 +34,45 @@ public class ChooseSongActivity extends AppCompatActivity {
             // Получение списка песен
             this.songsList = GameFileHelper.getSongsList(this);
 
+
+            // Если списка песен нет, то нужно создать новый__________________________
             if (songsList == null) {
                 this.songsList = new ArrayList<>();
-                songsList.add(new Song(1, "Believer", "Imagine Dragons",
-                        R.drawable.believer_imagine_dragons, R.raw.believer));
-                songsList.add(new Song(2, "Natural", "Imagine Dragons",
-                        R.drawable.natural_imagine_dragons, R.raw.natural));
-            }
 
+                // Первая песня_______________________________________________________
+                Song song1 = new Song(1, "Believer", "Imagine Dragons",
+                        R.drawable.believer_imagine_dragons, R.raw.believer);
+                HashMap<Integer, List<NoteTiming>> difficults1 = new HashMap<>();
+                difficults1.put(2, new ArrayList<>());
+                difficults1.put(6, new ArrayList<>());
+                difficults1.put(12, new ArrayList<>());
+                song1.setDifficults(difficults1);
+
+                songsList.add(song1);
+
+                // Вторая песня_______________________________________________________
+                Song song2 = new Song(2, "Natural", "Imagine Dragons",
+                        R.drawable.natural_imagine_dragons, R.raw.natural);
+                HashMap<Integer, List<NoteTiming>> difficults2 = new HashMap<>();
+                difficults2.put(1, new ArrayList<>());
+                difficults2.put(4, new ArrayList<>());
+                difficults2.put(9, new ArrayList<>());
+                song2.setDifficults(difficults2);
+
+                songsList.add(song2);
+            }
+            // ___________________________________________________________________
+
+
+
+            /*
+              TODO: То, что выше. Сделать, желательно, отдельный класс или метод для восстановления
+               базовых уровней, если такие не найдены. Пусть их будет как минимум 5. Все NoteTimings
+               для каждой сложности песни должны также быть подставлены туда по дефолту
+            */
+
+
+            // Сохранение списка песен____________________________________________
             GameFileHelper.saveSongsList(this, songsList);
 
             // Установка выбранного уровня в качестве первого

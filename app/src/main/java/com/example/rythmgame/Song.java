@@ -1,6 +1,6 @@
 package com.example.rythmgame;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Song {
@@ -10,7 +10,10 @@ public class Song {
     private String author;
     private int image;
     private int song;
-    private List<NoteTiming> noteTimings;
+    private HashMap<Integer, List<NoteTiming>> difficults;
+//    private List<NoteTiming> noteTimings;
+
+    // TODO: Здесь теперь вместо единичной сложности уровня будет HashMap для хранения списка NoteTiming на каждую сложность
 
     public Song(int id, String name, String author, int image, int song) {
         this.id = id;
@@ -18,7 +21,8 @@ public class Song {
         this.author = author;
         this.image = image;
         this.song = song;
-        this.noteTimings = new ArrayList<>();
+//        this.noteTimings = new ArrayList<>();
+        this.difficults = new HashMap<>();
     }
 
     public int getId() {
@@ -41,10 +45,14 @@ public class Song {
         return song;
     }
 
-    public List<NoteTiming> getNoteTimings() {
-        return noteTimings;
-    }
+//    public List<NoteTiming> getNoteTimings() {
+//        return noteTimings;
+//    }
 
+
+    public HashMap<Integer, List<NoteTiming>> getDifficults() {
+        return difficults;
+    }
 
     public void setId(int id) {
         this.id = id;
@@ -66,7 +74,11 @@ public class Song {
         this.song = song;
     }
 
-    public void setNoteTimings(List<NoteTiming> noteTimings) {
-        this.noteTimings = noteTimings;
+//    public void setNoteTimings(List<NoteTiming> noteTimings) {
+//        this.noteTimings = noteTimings;
+//    }
+
+    public void setDifficults(HashMap<Integer, List<NoteTiming>> difficults) {
+        this.difficults = difficults;
     }
 }

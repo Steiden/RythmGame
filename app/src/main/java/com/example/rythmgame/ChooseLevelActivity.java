@@ -1,16 +1,14 @@
 package com.example.rythmgame;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class ChooseLevelActivity extends AppCompatActivity {
 
@@ -40,6 +38,17 @@ public class ChooseLevelActivity extends AppCompatActivity {
             // Первый уровень выбран по умолчанию
             selectedLevel = findViewById(R.id.level1);
             selectedLevel.setBackgroundResource(R.drawable.button_level_selected_style);
+
+
+            /*
+            TODO: Сделать автоматическую подгрузку сложностей для выбранной песни.
+                Список уровней должен браться из HashMap выбранной песни, где хранятся все сложности
+                с их таймингами.
+                В контенер ScrollView должны добавляться, соответствующее количеству сложностей, кнопки
+                с подписанными сложностями.
+                    Лучше также сделать это отдельным методом или классом.
+             */
+
         }
         catch (Exception ex) {
             Toast.makeText(this, ex.getMessage(), Toast.LENGTH_SHORT).show();
